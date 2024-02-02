@@ -1,0 +1,31 @@
+<template>
+    <lightning-layout 
+    horizontal-align="space"
+     
+    pull-to-boundary="small"
+    vertical-align="start"
+  >
+    <lightning-layout-item>
+      <lightning-combobox
+        name="servico"
+        label="Serviço" required
+        value={valueServicoes}
+        placeholder=""
+        options={servicos}
+        onchange={handleChange} 
+
+      ></lightning-combobox>
+    </lightning-layout-item>
+    <lightning-layout-item>
+      <lightning-combobox
+        name="equipamento"
+        label="Equipamento" required
+        value={equipamento}
+        placeholder="Select Progress"
+        options={equipamentos}
+        onchange={handleChange} 
+
+      ></lightning-combobox>
+    </lightning-layout-item>
+  </lightning-layout>
+</template>

@@ -1,0 +1,74 @@
+<template>
+    <lightning-layout 
+                  horizontal-align="center"
+                  multiple-rows
+                  pull-to-boundary="small"
+                  vertical-align="center"
+                >
+                  <lightning-layout-item>
+                    <lightning-input 
+                      type="number" 
+                      name="cep" 
+                      label="CEP" required 
+                      formatter="decimal"
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      label="Rua"
+                      name="rua"
+                      value={rua}
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      label="Número"
+                      name="numero"
+                      value={numero}
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      type="text"
+                      name="complemento"
+                      label="complemento"
+                      value={complemento}
+                      onchange={handleChange}
+                    ></lightning-input>
+                  </lightning-layout-item>
+
+                  <lightning-layout-item>
+                    <lightning-input 
+                      type="text"
+                      label="Bairro"
+                      name="bairro"
+                      value={value}
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      type="text"
+                      label="Cidade"
+                      name="cidade"
+                      value={cidade}
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      type="text"
+                      label="Estado/Provincia"
+                      name="estado"
+                      value={estado}
+                      onchange={handleChange}
+                    ></lightning-input>
+
+                    <lightning-input 
+                      type="text"
+                      label="País"
+                      name="pais"
+                      value={pais}
+                      onchange={handleChange}
+                    ></lightning-input>
+                  </lightning-layout-item>
+                </lightning-layout>
+</template>

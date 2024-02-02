@@ -1,0 +1,43 @@
+<template>
+    <lightning-modal-header label="Novo Lead"></lightning-modal-header>
+    <lightning-modal-body>
+        <lightning-layout 
+          horizontal-align="center"
+           
+          pull-to-boundary="medium"
+          vertical-align="center"
+        >
+          <lightning-layout-item>
+                <label class="slds-form-element__label" for="unique-id-of-input" required>Qual tipo de lead deseja Criar?</label>
+          </lightning-layout-item>
+          <lightning-layout-item class="slds-m-top_medium">
+            <lightning-radio-group 
+              name="radioGroup" required
+              label="Qual tipo de lead deseja Criar?"
+              options={options}
+              type="radio"
+              value={value}
+              variant="label-hidden"
+              onchange={handleChange}
+            ></lightning-radio-group>
+     
+          </lightning-layout-item>
+        </lightning-layout>
+    </lightning-modal-body>
+    <lightning-modal-footer>
+        <div class="slds-m-top_small slds-m-bottom_medium">
+            <lightning-button 
+            class="slds-button"
+            variant="neutral"
+            label="Cancelar" 
+            onclick={handleClick} 
+          ></lightning-button>
+          <lightning-button 
+            class="slds-button"
+            variant="brand"
+            label="Avançar" 
+            onclick={handleClick} 
+          ></lightning-button>
+        </div>
+    </lightning-modal-footer>
+</template>
