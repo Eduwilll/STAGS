@@ -1,4 +1,7 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, wire, api } from "lwc";
+import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+import LEAD_OBJECT  from "@salesforce/schema/Lead";
+import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 
 export default class LeadPessoaJuridico extends LightningElement {
     activeSections = ['info_pessoa','info_servicos','info_address']
@@ -10,13 +13,50 @@ export default class LeadPessoaJuridico extends LightningElement {
     cnpj;
     empresa;
     cargo;
-    setor
-    origemLead
+    setor;
+    origemLead;
+    selectedLead = 'None';
+    optionsLead;
+    objectInfoData;
+    defaultRecordTypeId;
+    
     get options() {
         return [
             { label: 'Sr.', value: 'Sr.'},
             { label: 'Sra.', value: 'Sra.'},
         ]
+    }
+    
+
+
+    @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
+    wireObjectInfo({ error, data }){
+        if(data){
+            this.objectInfoData = data; // if you still need it
+            this.defaultRecordTypeId = data.defaultRecordTypeId;
+        } else if (error) {
+            this.error = error;
+            this.defaultRecordTypeId = undefined;
+            console.log('error' + error);
+        }
+    }
+
+    @wire(getPicklistValues, {
+        recordTypeId: '$defaultRecordTypeId',
+        fieldApiName: LEAD_ORIGIN_SOURCE
+    })
+    pickValues({ error, data }) {
+        if (data) {
+            this.optionsLead = data.values.map(plValue => {
+                return {
+                    label: plValue.label,
+                    value: plValue.value
+                };
+            });
+
+        } else if (error) {
+            console.log(error);
+        }
     }
 
     // atribui o valor para o a variavel com base no evento name;

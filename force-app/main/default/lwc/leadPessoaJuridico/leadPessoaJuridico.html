@@ -79,14 +79,14 @@
                       onchange={handleChange}
                     ></lightning-input>
                     <lightning-combobox
-                    name="origemLead"
-                    label="Origem do Lead"
-                    value={valueLead}
-                    placeholder=""
-                    options={optionsLead}
-                    onchange={handleChange} 
-    
-                    ></lightning-combobox>
+                      name="origemLead"
+                      label="Origem do Lead"
+                      value={selectedLead}
+                      placeholder=""
+                      options={optionsLead}
+                      onchange={handleChange} >
+                    </lightning-combobox>
+                   
                     <lightning-input 
                     type="email" 
                     name="email"
