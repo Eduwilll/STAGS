@@ -3,6 +3,7 @@ import { LightningElement } from 'lwc';
 export default class NovoLeadServicos extends LightningElement {
     valueServicoes = '';
     equipamento;
+    servico;
 
     get servicos() {
         return [
@@ -27,5 +28,14 @@ export default class NovoLeadServicos extends LightningElement {
         if (field) {
             this[field] = event.target.value;
         }
+        const eventer = new CustomEvent('child', {
+            // detail contains only primitives
+            detail: {
+                key1:this.servico,
+                key2:this.equipamento
+            }
+            });
+            this.dispatchEvent(eventer);
     }
 }
+   
