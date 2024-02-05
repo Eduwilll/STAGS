@@ -2,6 +2,9 @@ import { LightningElement, api ,wire} from 'lwc';
 import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import LEAD_OBJECT  from "@salesforce/schema/Lead";
 import LEAD_ORIGIN_SOURCE from '@salesforce/schema/Lead.LeadSource';
+import { options } from 'c/leadUtils';
+//import { createLeadRecord } from '@salesforce/apex/LeadController';
+
 //import LightningModal from 'lightning/modal';
 
 export default class LeadPessoaFisica extends LightningElement /*LightningModal*/  {
@@ -21,12 +24,8 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
     defaultRecordTypeId;
     objectInfoData;
     // pickList para Tratamento
-    get options() {
-        return [
-            { label: 'Sr.', value: 'Sr.'},
-            { label: 'Sra.', value: 'Sra.'},
-        ]
-    }
+    options = options()
+ 
 
     @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
     wireObjectInfo({ error, data }){
@@ -81,6 +80,7 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
     // cheack se o checkbox 'Não chamar' ativado.
     handleChangeCheck(event) {
         this.isChecked = event.target.checked;
+        console.log('não chamar',this.isChecked);
     }
     //aciona o botão
     handleOkay() {

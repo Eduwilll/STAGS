@@ -71,13 +71,20 @@
                   <lightning-layout-item 
                     alignment-bump="left"
                   >
-                    <lightning-input 
-                      type="text"
-                      label="Setor" required
-                      name="setor"
-                      placeholder="Industry"
-                      onchange={handleChange}
-                    ></lightning-input>
+                  <lightning-combobox
+                    label="Setor" required
+                    message-when-value-missing=""
+                    name="setor"
+                    options={optionsSetor}
+                    onchange={handleChange} 
+                    placeholder=""
+                    value={value}
+                    variant="standard"
+                     
+                     
+                     
+                  ></lightning-combobox>
+                    
                     <lightning-combobox
                       name="origemLead"
                       label="Origem do Lead"
@@ -108,9 +115,17 @@
                     <div class="container">
                         <input 
                             type="checkbox" 
-                            checked={isChecked} 
+                            checked={isChecked}
+                            name="isChecked"
                             onchange={handleChangeCheck} />
                     </div>
+
+                    <lightning-input 
+                      type="text"
+                      label="Website"
+                      name="website"
+                      onchange={handleChange}
+                    ></lightning-input>
                   </lightning-layout-item>
                 </lightning-layout>
                 
@@ -119,11 +134,11 @@
             </lightning-accordion-section>
             <lightning-accordion-section name="info_servicos" label="Informações de serviço">
               
-              <c-novo-lead-servicos></c-novo-lead-servicos>
+              <c-novo-lead-servicos  onchild={handleChildInfoServicos}></c-novo-lead-servicos>
 
             </lightning-accordion-section>
             <lightning-accordion-section name="info_address" label="Informações de endereço">
-                <c-novo-lead-endereco></c-novo-lead-endereco>
+                <c-novo-lead-endereco onequipamentos={handleChildInfoEndereco}></c-novo-lead-endereco>
             </lightning-accordion-section>
 
         </lightning-accordion>
