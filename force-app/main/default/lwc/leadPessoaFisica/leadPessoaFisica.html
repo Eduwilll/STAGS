@@ -1,3 +1,10 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 02-05-2024
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
 <template>
     <lightning-modal-header label="Novo Lead"></lightning-modal-header>
     <lightning-modal-body> 
@@ -94,18 +101,18 @@
             </lightning-accordion-section>
             <lightning-accordion-section name="info_servicos" label="Informações de serviço">
               
-              <c-novo-lead-servicos></c-novo-lead-servicos>
+              <c-novo-lead-servicos onchild={handleChildInfoServicos}></c-novo-lead-servicos>
 
             </lightning-accordion-section>
             <lightning-accordion-section name="info_address" label="Informações de endereço">
-                <c-novo-lead-endereco></c-novo-lead-endereco>
+              <c-novo-lead-endereco onequipamentos={handleChildInfoEndereco}></c-novo-lead-endereco>
             </lightning-accordion-section>
 
         </lightning-accordion>
         <!-- /accordion -->
     </lightning-modal-body>
     <lightning-modal-footer>
-        <lightning-button class="slds-button" variant="neutral" label="Cancelar" onclick={handleOkay}></lightning-button>
-        <lightning-button class="slds-button" variant='brand' label="Salvar" onclick={handleOkay}></lightning-button>
+        <lightning-button class="slds-button" variant="neutral" label="Cancelar" ></lightning-button>
+        <lightning-button class="slds-button" variant='brand' label="Salvar" onclick={handleSalvar}></lightning-button>
     </lightning-modal-footer>
 </template>

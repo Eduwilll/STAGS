@@ -3,7 +3,8 @@ import { getObjectInfo, getPicklistValues } from 'lightning/uiObjectInfoApi';
 import LEAD_OBJECT  from "@salesforce/schema/Lead";
 import LEAD_ORIGIN_SOURCE from '@salesforce/schema/Lead.LeadSource';
 import { options } from 'c/leadUtils';
-//import { createLeadRecord } from '@salesforce/apex/LeadController';
+import  createLeadPessoaFisicaRecord  from '@salesforce/apex/LeadController.createLeadPessoaFisicaRecord';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 //import LightningModal from 'lightning/modal';
 
@@ -25,8 +26,20 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
     objectInfoData;
     // pickList para Tratamento
     options = options()
- 
-
+  //variaveis do tipo serviços
+    servico;
+    equipamento;
+    
+    //variaveis do endereco;
+    cep;
+    bairro;
+    rua;
+    cidade;
+    estado;
+    complemento;
+    numero;
+    pais;
+    company ='Teste';
     @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
     wireObjectInfo({ error, data }){
         if(data){
@@ -66,6 +79,38 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
             this[field] = event.target.value;
         }
     }
+
+    //handleChild Componente servicos
+    handleChildInfoServicos(event){
+        //child servicos
+        this.servico = event.detail.key10;
+        this.equipamento = event.detail.key11;
+    
+        console.log('servicos:', this.servico);
+        console.log('equipamento', this.equipamento);
+    }
+    //handleChild Componente endereco
+    handleChildInfoEndereco (event){
+        //child endereco
+        this.cep = event.detail.key1;
+        this.bairro = event.detail.key2;
+        this.rua = event.detail.key3;
+        this.cidade = event.detail.key4;
+        this.estado = event.detail.key5;
+        this.complemento = event.detail.key6;
+        this.numero = event.detail.key7;
+        this.pais = event.detail.key8;
+
+        console.log('cep', this.cep);
+        console.log('bairro:', this.bairro);
+        console.log('rua', this.rua);
+        console.log('cidade:', this.cidade);
+        console.log('estado', this.estado);
+        console.log('complemento:', this.complemento);
+        console.log('numero', this.numero);
+        console.log('pais:', this.pais);
+ 
+    }
     //aciona os accordion
     handleToggleSection(event){
         const openSections = event.detail.openSections;
@@ -83,7 +128,52 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
         console.log('não chamar',this.isChecked);
     }
     //aciona o botão
-    handleOkay() {
-        this.close('okay');
+    handleSalvar() {
+        console.log('Aciounou botão');
+        try {
+            const result = createLeadPessoaFisicaRecord({
+                leadFirstName: this.name,
+                leadLastName: this.sobrenome,
+                leadEmail: this.email,
+                leadPhone: this.phone,
+                leadCpf: this.cpf,
+                leadOrigem: this.origemLead,
+                leadDoNotCall: this.isChecked,
+                leadCep: this.cep,
+                leadRua: this.rua,
+                leadNumero: this.numero,
+                leadComplemento: this.complemento,
+                leadBairro: this.bairro,
+                leadCidade: this.cidade,
+                leadEstado: this.estado,
+                leadPais: this.pais,
+                leadServico: this.servico,
+                leadEquipamento: this.equipamento,
+                LeadCompany: this.company
+            })
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Sucesso',
+                    message: 'Avaliação criada com sucesso!',
+                    variant: 'success'
+                })
+            );
+        } catch (error) {
+            console.error(error);
+            // Extrair a mensagem de erro da exceção
+            let errorMessage = 'Ocorreu um erro ao criar a avaliação.';
+            if (error.body && error.body.message) {
+                errorMessage = error.body.message;
+            }
+            // Exibir uma mensagem de erro
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Erro',
+                    message: 'Ocorreu um erro ao criar a avaliação.'+errorMessage,
+                    variant: 'error'
+                })
+            );
+        
+        }
     }
 }

@@ -6,8 +6,8 @@ export default class NovoLead extends LightningElement /*LightningModal*/  {
 
     get options() {
         return [
-            { label: 'Pessoa Jurídica', value: 'optionJuri'},
-            { label: 'Pessoa Física', value: 'optionFisi'},
+            { label: 'Pessoa Jurídica', value: 'Pessoa Jurídica'},
+            { label: 'Pessoa Física', value: 'Pessoa Física'},
         ]
     }
     handleChange(event){

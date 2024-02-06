@@ -4,7 +4,8 @@ import LEAD_OBJECT  from "@salesforce/schema/Lead";
 import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 import LEAD_INDUSTRY from "@salesforce/schema/Lead.Industry";
 import { options } from 'c/leadUtils';
-//import createLeadPessoaJuridicaRecord from '@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord';
+import createLeadPessoaJuridicaRecord from '@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class LeadPessoaJuridico extends LightningElement {
     activeSections = ['info_pessoa','info_servicos','info_address']
@@ -19,6 +20,7 @@ export default class LeadPessoaJuridico extends LightningElement {
     cargo;
     setor;
     origemLead;
+    phone;
     selectedLead = 'None';
     optionsLead;
     objectInfoData;
@@ -29,8 +31,19 @@ export default class LeadPessoaJuridico extends LightningElement {
     website = '';
     // pickList para Tratamento
     options = options()
+    //variaveis do tipo serviços
+    servico;
+    equipamento;
     
-
+    //variaveis do endereco;
+    cep;
+    bairro;
+    rua;
+    cidade;
+    estado;
+    complemento;
+    numero;
+    pais;
     // LeadSource
     @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
     wireObjectInfoLeadSource({ error, data }){
@@ -108,33 +121,32 @@ export default class LeadPessoaJuridico extends LightningElement {
     //handleChild Componente servicos
     handleChildInfoServicos(event){
         //child servicos
-        const servico = event.detail.key1;
-        const equipamento = event.detail.key2;
-
-        console.log('servicos:',servico);
-        console.log('equipamento',equipamento);
-  
+        this.servico = event.detail.key10;
+        this.equipamento = event.detail.key11;
+    
+        console.log('servicos:', this.servico);
+        console.log('equipamento', this.equipamento);
     }
     //handleChild Componente endereco
     handleChildInfoEndereco (event){
         //child endereco
-        const cep = event.detail.key1;
-        const bairro = event.detail.key2;
-        const rua = event.detail.key3;
-        const cidade = event.detail.key4;
-        const estado = event.detail.key5;
-        const complemento = event.detail.key6;
-        const numero = event.detail.key7;
-        const pais = event.detail.key8;
+        this.cep = event.detail.key1;
+        this.bairro = event.detail.key2;
+        this.rua = event.detail.key3;
+        this.cidade = event.detail.key4;
+        this.estado = event.detail.key5;
+        this.complemento = event.detail.key6;
+        this.numero = event.detail.key7;
+        this.pais = event.detail.key8;
 
-        console.log('cep',cep);
-        console.log('bairro:',bairro);
-        console.log('rua',rua);
-        console.log('cidade:',cidade);
-        console.log('estado',estado);
-        console.log('complemento:',complemento);
-        console.log('numero',numero);
-        console.log('pais:',pais);
+        console.log('cep', this.cep);
+        console.log('bairro:', this.bairro);
+        console.log('rua', this.rua);
+        console.log('cidade:', this.cidade);
+        console.log('estado', this.estado);
+        console.log('complemento:', this.complemento);
+        console.log('numero', this.numero);
+        console.log('pais:', this.pais);
  
     }
      //aciona os accordion
@@ -154,29 +166,57 @@ export default class LeadPessoaJuridico extends LightningElement {
         console.log('não chamar',this.isChecked);
     }
     //aciona o botão
-    handleOkay() {
-    //     console.log('Acionou botão');
-    //     createLeadPessoaJuridicaRecord({
-    //                                     leadFirstName :this.name,
-    //                                     leadLastName:this.sobrenome,
-    //                                     leadEmail: this.email,
-    //                                     leadCnpj:this.cnpj,
-    //                                     leadEmpresa:this.empresa,
-    //                                     leadSetor:this.setor,
-    //                                     leadCargo: this.cargo,
-    //                                     leadOrigem: this.origemLead,
-    //                                     leadDoNotCall:this.isChecked,
-    //                                     leadWebsite: this.website,
-    //                                     leadCep:this.cep,
-    //                                     leadRua: this.rua,
-    //                                     leadNumero:this.numero,
-    //                                     leadComplemento:this.complemento,
-    //                                     leadBairro:this.bairro,
-    //                                     leadCidade:this.cidade,
-    //                                     leadEstado:this.estado,
-    //                                     leadPais:this.pais,
-    //                                     leadServico:this.servicos,
-    //                                     leadEquipamento: this.equipamento
-    //                                     })
+     handleOkay() {
+        console.log('Acionou botão');
+        try {
+            const result =  createLeadPessoaJuridicaRecord({
+                leadSalutation: this.tratamento,
+                leadFirstName :this.name,
+                leadLastName:this.sobrenome,
+                leadEmail: this.email,
+                leadCnpj:this.cnpj,
+                leadEmpresa:this.empresa,
+                leadSetor:this.setor,
+                leadCargo: this.cargo,
+                leadPhone: this.phone,
+                leadOrigem: this.origemLead,
+                leadDoNotCall:this.isChecked,
+                leadWebsite: this.website,
+                leadCep:this.cep,
+                leadRua: this.rua,
+                leadNumero:this.numero,
+                leadComplemento:this.complemento,
+                leadBairro:this.bairro,
+                leadCidade:this.cidade,
+                leadEstado:this.estado,
+                leadPais:this.pais,
+                leadServico:this.servico,
+                leadEquipamento: this.equipamento
+                })
+            // Exibir uma mensagem de sucesso
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Sucesso',
+                    message: 'Avaliação criada com sucesso!',
+                    variant: 'success'
+                })
+            );
+        } catch (error) {
+            console.error(error);
+            // Extrair a mensagem de erro da exceção
+            let errorMessage = 'Ocorreu um erro ao criar a avaliação.';
+            if (error.body && error.body.message) {
+                errorMessage = error.body.message;
+            }
+            // Exibir uma mensagem de erro
+            this.dispatchEvent(
+                new ShowToastEvent({
+                    title: 'Erro',
+                    message: 'Ocorreu um erro ao criar a avaliação.'+errorMessage,
+                    variant: 'error'
+                })
+            );
+        }
+        
     }
 }

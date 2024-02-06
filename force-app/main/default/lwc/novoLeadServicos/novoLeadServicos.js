@@ -7,16 +7,16 @@ export default class NovoLeadServicos extends LightningElement {
 
     get servicos() {
         return [
-            { label: 'Venda', value: 'venda'},
-            { label: 'Manutenção', value: 'manutencao'},
-            { label: 'Instalação', value: 'instalacao'}
+            { label: 'Venda', value: 'Venda'},
+            { label: 'Manutenção', value: 'Manutenção'},
+            { label: 'Instalação', value: 'Instalação'}
         ]
     }
     get equipamentos (){
         return [
-            { label: 'Fujitsu', value: 'fujitsu'},
-            { label: 'LG', value: 'lg'},
-            { label: 'GREE', value: 'gree'}
+            { label: 'Fujitsu', value: 'Fujitsu'},
+            { label: 'LG', value: 'LG'},
+            { label: 'GREE', value: 'GREE'}
         ]
     }
 
@@ -31,8 +31,8 @@ export default class NovoLeadServicos extends LightningElement {
         const eventer = new CustomEvent('child', {
             // detail contains only primitives
             detail: {
-                key1:this.servico,
-                key2:this.equipamento
+                key10:this.servico,
+                key11:this.equipamento
             }
             });
             this.dispatchEvent(eventer);
