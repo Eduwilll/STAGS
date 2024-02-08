@@ -1,9 +1,13 @@
 <template>
-    <lightning-modal-header label="Novo Lead"></lightning-modal-header>
+  <template if:true={selectRecord}>
+
+    <lightning-modal-header >
+      <h2 class="slds-text-heading_medium">Novo Lead</h2>
+
+    </lightning-modal-header>
     <lightning-modal-body>
         <lightning-layout 
           horizontal-align="center"
-           
           pull-to-boundary="medium"
           vertical-align="center"
         >
@@ -12,14 +16,13 @@
           </lightning-layout-item>
           <lightning-layout-item class="slds-m-top_medium">
             <lightning-radio-group 
-              name="radioGroup" required
-              label="Qual tipo de lead deseja Criar?"
-              options={options}
-              type="radio"
-              value={value}
-              variant="label-hidden"
-              onchange={handleChange}
-            ></lightning-radio-group>
+            name="recordType" 
+            label="Que tipo de lead deseja criar" required 
+            options={recordTypeOptions} 
+            value={selectedRecordType} 
+            onchange={handleRecordTypeChange}>
+          </lightning-radio-group>
+
      
           </lightning-layout-item>
         </lightning-layout>
@@ -30,14 +33,23 @@
             class="slds-button"
             variant="neutral"
             label="Cancelar" 
-            onclick={handleClick} 
+            onclick={closeModal} 
           ></lightning-button>
           <lightning-button 
             class="slds-button"
             variant="brand"
             label="Avançar" 
-            onclick={handleClick} 
+            onclick={navigateToLead}
           ></lightning-button>
         </div>
     </lightning-modal-footer>
+  </template>
+      
+    <template if:true={selectRecordFisico}>
+      <c-lead-pessoa-fisica></c-lead-pessoa-fisica>
+  </template>
+
+  <template if:true={selectRecordJuridico}>
+      <c-lead-pessoa-juridico></c-lead-pessoa-juridico>
+  </template>
 </template>

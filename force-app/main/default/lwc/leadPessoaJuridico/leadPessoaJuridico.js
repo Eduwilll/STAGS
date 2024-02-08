@@ -6,8 +6,9 @@ import LEAD_INDUSTRY from "@salesforce/schema/Lead.Industry";
 import { options } from 'c/leadUtils';
 import createLeadPessoaJuridicaRecord from '@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import LightningModal from 'lightning/modal';
 
-export default class LeadPessoaJuridico extends LightningElement {
+export default class LeadPessoaJuridico extends LightningModal {
     activeSections = ['info_pessoa','info_servicos','info_address']
     activeSectionsMessage= '';
     tratamento;

@@ -5,6 +5,7 @@ import LEAD_ORIGIN_SOURCE from '@salesforce/schema/Lead.LeadSource';
 import { options } from 'c/leadUtils';
 import  createLeadPessoaFisicaRecord  from '@salesforce/apex/LeadController.createLeadPessoaFisicaRecord';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
+import LightningModal from 'lightning/modal';
 
 //import LightningModal from 'lightning/modal';
 

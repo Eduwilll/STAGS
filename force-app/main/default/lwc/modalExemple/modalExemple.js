@@ -1,13 +1,28 @@
 // ModalPopupLWC.js
-import { LightningElement, track } from 'lwc';
+import { LightningElement } from 'lwc';
 import NovoLead from 'c/novoLead';
 
 export default class ModalPopupLWC extends LightningElement {
-    @track isModalOpen = false;
+    isModalOpen = false;
+    async openModal() {
+        this.isModalOpen = false;
 
-    openModal() {
-        this.isModalOpen = true;
+        const result = await NovoLead.open({
+            // `label` is not included here in this example.
+            // it is set on lightning-modal-header instead
+            size: 'small',
+            description: 'Accesando new leads',
+            content: 'Passed into content api',
+        });
+        // if modal closed with X button, promise returns result = 'undefined'
+        // if modal closed with OK button, promise returns result = 'okay'
+        this.isModalOpen = false;
+
+        console.log(result);
     }
+    // openModal() {
+    //     this.isModalOpen = true;
+    // }
 
     handleCloseModal() {
         this.isModalOpen = false;
