@@ -1,13 +1,13 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement } from 'lwc';
 import LightningModal from 'lightning/modal';
 import { NavigationMixin } from 'lightning/navigation';
 
 export default class NovoLead extends LightningModal {
-    @track selectedRecordType = '';
-    @track selectRecordFisico = false;
-    @track selectRecordJuridico = false;
+    selectedRecordType = 'PessoaFisica';
+    selectRecordFisico = false;
+    selectRecordJuridico = false;
     selectRecord = true;
-    @track recordTypeOptions = [
+    recordTypeOptions = [
         { label: 'Pessoa Fisica', value: 'PessoaFisica' },
         { label: 'Pessoa Juridica', value: 'PessoaJuridica' }
     ];
@@ -36,15 +36,9 @@ export default class NovoLead extends LightningModal {
         this.dispatchEvent(event);
     }
 
+  
     closeModal() {
-        // Dispatch an event to inform the parent component to close the modal
-        const event = new CustomEvent('closemodal');
-        this.dispatchEvent(event);
+        this.close('okay');
     }
-
-    handleCancelModal() {
-        // Dispatch an event to inform the parent component to cancel and close the modal
-        const event = new CustomEvent('cancelmodal');
-        this.dispatchEvent(event);
-    }
+    
 }

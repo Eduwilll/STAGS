@@ -220,4 +220,8 @@ export default class LeadPessoaJuridico extends LightningModal {
         }
         
     }
+    closeModal() {
+        const event = new CustomEvent('closemodal');
+        this.dispatchEvent(event);
+    }
 }

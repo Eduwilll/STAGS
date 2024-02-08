@@ -177,4 +177,9 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
         
         }
     }
+
+    closeModal() {
+        const event = new CustomEvent('closemodal');
+        this.dispatchEvent(event);
+    }
 }
