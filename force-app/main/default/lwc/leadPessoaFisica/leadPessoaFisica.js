@@ -5,6 +5,8 @@ import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 import { options } from "c/leadUtils";
 import createLeadPessoaFisicaRecord from "@salesforce/apex/LeadController.createLeadPessoaFisicaRecord";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { getRecord } from 'lightning/uiRecordApi';
+
 //import LightningModal from 'lightning/modal';
 
 export default class LeadPessoaFisica extends LightningElement /*LightningModal*/ {
@@ -39,6 +41,32 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
   numero;
   pais;
   company = "Teste";
+
+  objectNameToGetRecordTypes = 'Lead';
+  lstRecordTypes = [];
+  selectedRecordTypeId;
+  selectedRecordTypeName;
+  
+  @wire(getObjectInfo, { objectApiName: '$objectNameToGetRecordTypes' })
+  getObjectInfo({ error, data }) {
+      if (data) {
+          this.lstRecordTypes = [];
+          for (let key in data.recordTypeInfos) {
+              if (data.recordTypeInfos[key].name === 'Pessoa Física') {
+                  // Found the desired record type
+                  this.selectedRecordTypeId = key;
+                  this.selectedRecordTypeName = key.name;
+              }
+  
+              this.lstRecordTypes.push({ value: key, label: data.recordTypeInfos[key].name });
+          }
+      } else if (error) {
+          console.log('Error while getting record types');
+          this.lstRecordTypes = [];
+      }
+  }
+
+
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfo({ error, data }) {
     if (data) {
@@ -159,7 +187,7 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
   }
   handleSalvar() {
     console.log("Aciounou botão");
-    if (!this.name || !this.sobrenome || !this.email || !this.cpf || this.servico || this.equipamento || this.cep) {
+    if (!this.name || !this.sobrenome || !this.email || !this.cpf ) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
@@ -186,16 +214,16 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
         })
       );
       return;
-    } else if (!this.validatePhone(this.phone)) {
-      this.dispatchEvent(
-        new ShowToastEvent({
-          title: "Error",
-          message:
-            "Formato de número de telefone inválido. Introduza um número de telefone válido.",
-          variant: "error",
-        })
-      );
-      return;
+    // } else if (!this.validatePhone(this.phone)) {
+    //   this.dispatchEvent(
+    //     new ShowToastEvent({
+    //       title: "Error",
+    //       message:
+    //         "Formato de número de telefone inválido. Introduza um número de telefone válido.",
+    //       variant: "error",
+    //     })
+    //   );
+    //   return;
     } else {
       try {
         const result = createLeadPessoaFisicaRecord({
@@ -217,11 +245,11 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
           leadServico: this.servico,
           leadEquipamento: this.equipamento,
           LeadCompany: this.company,
-        })
-          .then((result) => {
+          leadRecordTypeId: this.selectedRecordTypeId
+        }).then((result) => {
             this.dispatchEvent(
               new ShowToastEvent({
-                title: "Success",
+                title: "Sucesso",
                 message: "Record created successfully",
                 variant: "success",
               })

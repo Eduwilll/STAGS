@@ -45,6 +45,32 @@ export default class LeadPessoaJuridico extends LightningModal {
   complemento;
   numero;
   pais;
+
+  objectNameToGetRecordTypes = 'Lead';
+  lstRecordTypes = [];
+  selectedRecordTypeId;
+  selectedRecordTypeName;
+  
+  @wire(getObjectInfo, { objectApiName: '$objectNameToGetRecordTypes' })
+  getObjectInfo({ error, data }) {
+      if (data) {
+          this.lstRecordTypes = [];
+          for (let key in data.recordTypeInfos) {
+              if (data.recordTypeInfos[key].name === 'Pessoa Juridica') {
+                  // Found the desired record type
+                  this.selectedRecordTypeId = key;
+                  this.selectedRecordTypeName = key.name;
+              }
+  
+              this.lstRecordTypes.push({ value: key, label: data.recordTypeInfos[key].name });
+          }
+      } else if (error) {
+          console.log('Error while getting record types');
+          this.lstRecordTypes = [];
+      }
+  }
+
+
   // LeadSource
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfoLeadSource({ error, data }) {
@@ -181,7 +207,7 @@ export default class LeadPessoaJuridico extends LightningModal {
   //aciona o botão
   handleOkay() {
     console.log("Acionou botão");
-    if (!this.name || !this.sobrenome || !this.email || !this.cnpj || this.servico || this.equipamento || this.cep) {
+    if (!this.name || !this.sobrenome || !this.email || !this.cnpj) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
@@ -244,6 +270,7 @@ export default class LeadPessoaJuridico extends LightningModal {
           leadPais: this.pais,
           leadServico: this.servico,
           leadEquipamento: this.equipamento,
+          leadRecordTypeId: this.selectedRecordTypeId
         })
           .then((result) => {
             this.dispatchEvent(
