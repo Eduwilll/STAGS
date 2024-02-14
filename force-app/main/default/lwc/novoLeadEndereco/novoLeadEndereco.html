@@ -1,11 +1,9 @@
 <template>
     <lightning-layout 
-                  horizontal-align="center"
                   multiple-rows
-                  pull-to-boundary="small"
-                  vertical-align="center"
+                  pull-to-boundary="medium"
                 >
-                  <lightning-layout-item>
+                  <lightning-layout-item flexibility="auto" padding="horizontal-medium">
                     <lightning-input 
                       type="text" 
                       name="cep" 
@@ -38,7 +36,7 @@
                     ></lightning-input>
                   </lightning-layout-item>
 
-                  <lightning-layout-item>
+                  <lightning-layout-item flexibility="auto" padding="horizontal-medium">
                     <lightning-input 
                       type="text"
                       label="Bairro"

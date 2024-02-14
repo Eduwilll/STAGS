@@ -1,7 +1,9 @@
 <template>
     <lightning-layout 
+             multiple-rows
+                  pull-to-boundary="medium"
   >
-    <lightning-layout-item>
+    <lightning-layout-item flexibility="auto" padding="horizontal-medium">
       <lightning-combobox
         name="servico"
         label="Serviço" required
@@ -11,8 +13,8 @@
         onchange={handleChange} 
 
       ></lightning-combobox>
-    </lightning-layout-item>
-    <lightning-layout-item>
+    </lightning-layout-item >
+    <lightning-layout-item flexibility="auto" padding="horizontal-medium">
       <lightning-combobox
         name="equipamento"
         label="Equipamento" required

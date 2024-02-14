@@ -1,28 +1,29 @@
 <template>
   <lightning-modal-header >
     <h2 class="slds-text-heading_medium">Novo Lead</h2>
-
+    <div class="slds-card">
+      <lightning-combobox name="fieldList" label='Field List' options={lstRecordTypes} placeholder="Select Field"></lightning-combobox>
+  </div>
+  <p>{selectedRecordTypeId}</p>
+  <p>{selectedRecordTypeName}</p>
   </lightning-modal-header>
     <lightning-modal-body> 
         <!-- accordion -->
         <lightning-accordion 
                             allow-multiple-sections-open
                             onsectiontoggle={handleToggleSection}
-                            active-section-name={activeSections}>
+                            active-section-name={activeSections}
+                            class="accordion-pessoa-fisica">
             <lightning-accordion-section name="info_pessoa" label="Informações do Lead pessoa física">
                 <!-- Info Pessoas -->
 
                 <lightning-layout
-                  horizontal-align="center"
                   multiple-rows
                   pull-to-boundary="medium"
-                  vertical-align="center"
                   class="custom-columns"
                 >  
                   <lightning-layout-item 
-                    alignment-bump="right"
-                    flexibility="auto"
-                    padding="around-small"
+                    flexibility="auto" padding="horizontal-medium"
                     class="custom-column"
                   >
                  
@@ -61,9 +62,7 @@
                   </lightning-layout-item>
                   <!-- left -->
                   <lightning-layout-item 
-                  alignment-bump="left"
-                  flexibility="auto"
-                  padding="around-small"
+                  flexibility="auto" padding="horizontal-medium"
                   class="custom-column left-column">
                   <lightning-combobox
                     name="origemLead"
