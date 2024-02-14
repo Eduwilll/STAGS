@@ -1,10 +1,3 @@
-<!--
-  @description       : 
-  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
-  @group             : 
-  @last modified on  : 02-08-2024
-  @last modified by  : Eduardo Fabricio
--->
 <template>
   <lightning-modal-header >
     <h2 class="slds-text-heading_medium">Novo Lead</h2>
@@ -20,13 +13,17 @@
                 <!-- Info Pessoas -->
 
                 <lightning-layout
-                horizontal-align="center"
+                  horizontal-align="center"
                   multiple-rows
                   pull-to-boundary="medium"
-                  vertical-align="stretch"
+                  vertical-align="center"
+                  class="custom-columns"
                 >  
                   <lightning-layout-item 
                     alignment-bump="right"
+                    flexibility="auto"
+                    padding="around-small"
+                    class="custom-column"
                   >
                  
                     <lightning-combobox
@@ -41,6 +38,7 @@
                     <lightning-input 
                     type="text"
                     label="Primeiro nome" required
+                    message-when-value-missing="Preencha este campo"
                     name="name"
                     onchange={handleChange} 
                     ></lightning-input>
@@ -48,6 +46,7 @@
                     <lightning-input 
                     type="text"
                     label="Sobrenome" required
+                    message-when-value-missing="Preencha este campo"
                     name="sobrenome"
                     onchange={handleChange} 
                     ></lightning-input>
@@ -55,14 +54,17 @@
                     <lightning-input 
                     type="text"
                     label="CPF" required
+                    message-when-value-missing="Preencha este campo"
                     name="cpf"
                     onchange={handleChange} 
                     ></lightning-input>
                   </lightning-layout-item>
                   <!-- left -->
                   <lightning-layout-item 
-                    alignment-bump="left"
-                  >
+                  alignment-bump="left"
+                  flexibility="auto"
+                  padding="around-small"
+                  class="custom-column left-column">
                   <lightning-combobox
                     name="origemLead"
                     label="Origem do Lead"

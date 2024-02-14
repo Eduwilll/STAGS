@@ -7,11 +7,11 @@
                 >
                   <lightning-layout-item>
                     <lightning-input 
-                      type="number" 
+                      type="text" 
                       name="cep" 
                       label="CEP" required 
+                      message-when-value-missing="Preencha este campo"
                       value={cep}
-                      formatter="decimal"
                       onchange={handleChange}
                     ></lightning-input>
 

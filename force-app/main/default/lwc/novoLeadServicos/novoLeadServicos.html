@@ -1,14 +1,11 @@
 <template>
     <lightning-layout 
-    horizontal-align="space"
-     
-    pull-to-boundary="small"
-    vertical-align="start"
   >
     <lightning-layout-item>
       <lightning-combobox
         name="servico"
         label="Serviço" required
+        message-when-value-missing="Selecione o serviço"
         value={valueServicoes}
         options={servicos}
         onchange={handleChange} 
@@ -19,6 +16,7 @@
       <lightning-combobox
         name="equipamento"
         label="Equipamento" required
+        message-when-value-missing="Selecione o Equipamento"
         options={equipamentos}
         onchange={handleChange} 
 

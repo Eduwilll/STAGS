@@ -34,6 +34,7 @@
                     <lightning-input 
                     type="text"
                     label="Primeiro nome" required
+                    message-when-value-missing="Preencha este campo"
                     name="name"
                     placeholder="First name"
                     onchange={handleChange} 
@@ -42,14 +43,16 @@
                     <lightning-input 
                     type="text"
                     label="Sobrenome" required
+                    message-when-value-missing="Preencha este campo"
                     name="sobrenome"
                     placeholder="Last name"
                     onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
-                    type="number"
+                    type="text"
                     label="CNPJ" required
+                    message-when-value-missing="Preencha este campo"
                     name="cnpj"
                     onchange={handleChange} 
                     ></lightning-input>
@@ -57,6 +60,7 @@
                     <lightning-input 
                       type="text"
                       label="Empresa" required
+                      message-when-value-missing="Preencha este campo"
                       name="empresa"
                       placeholder="Company"
                       onchange={handleChange}
@@ -65,6 +69,7 @@
                     <lightning-input 
                       type="text"
                       label="Cargo" required
+                      message-when-value-missing="Preencha este campo"
                       name="cargo"
                       placeholder="Title"
                       onchange={handleChange}
@@ -76,7 +81,7 @@
                   >
                   <lightning-combobox
                     label="Setor" required
-                    message-when-value-missing=""
+                    message-when-value-missing="Preencha este campo"
                     name="setor"
                     options={optionsSetor}
                     onchange={handleChange} 
@@ -101,6 +106,7 @@
                     type="email" 
                     name="email"
                     label="Email" required
+                    message-when-value-missing="Preencha este campo"
                     onchange={handleChange} 
 
                     ></lightning-input>
