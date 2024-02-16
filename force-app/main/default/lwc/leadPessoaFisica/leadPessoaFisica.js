@@ -5,12 +5,12 @@ import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 import { options } from "c/leadUtils";
 import createLeadPessoaFisicaRecord from "@salesforce/apex/LeadController.createLeadPessoaFisicaRecord";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { getRecord } from 'lightning/uiRecordApi';
+import { NavigationMixin } from 'lightning/navigation';
 
 //import LightningModal from 'lightning/modal';
 
-export default class LeadPessoaFisica extends LightningElement /*LightningModal*/ {
-  @api content;
+export default class LeadPessoaFisica extends NavigationMixin(LightningElement) /*LightningModal*/ {
+  @api recordId;
   activeSections = ["info_pessoa", "info_servicos", "info_address"];
   activeSectionsMessage = "";
   valueLead = "";
@@ -42,30 +42,33 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
   pais;
   company = "Teste";
 
-  objectNameToGetRecordTypes = 'Lead';
+  objectNameToGetRecordTypes = "Lead";
   lstRecordTypes = [];
   selectedRecordTypeId;
   selectedRecordTypeName;
-  
-  @wire(getObjectInfo, { objectApiName: '$objectNameToGetRecordTypes' })
-  getObjectInfo({ error, data }) {
-      if (data) {
-          this.lstRecordTypes = [];
-          for (let key in data.recordTypeInfos) {
-              if (data.recordTypeInfos[key].name === 'Pessoa Física') {
-                  // Found the desired record type
-                  this.selectedRecordTypeId = key;
-                  this.selectedRecordTypeName = key.name;
-              }
-  
-              this.lstRecordTypes.push({ value: key, label: data.recordTypeInfos[key].name });
-          }
-      } else if (error) {
-          console.log('Error while getting record types');
-          this.lstRecordTypes = [];
-      }
-  }
+  showError = false;
 
+  @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
+  getObjectInfo({ error, data }) {
+    if (data) {
+      this.lstRecordTypes = [];
+      for (let key in data.recordTypeInfos) {
+        if (data.recordTypeInfos[key].name === "Pessoa Física") {
+          // Found the desired record type
+          this.selectedRecordTypeId = key;
+          this.selectedRecordTypeName = key.name;
+        }
+
+        this.lstRecordTypes.push({
+          value: key,
+          label: data.recordTypeInfos[key].name,
+        });
+      }
+    } else if (error) {
+      console.log("Error while getting record types");
+      this.lstRecordTypes = [];
+    }
+  }
 
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfo({ error, data }) {
@@ -104,6 +107,7 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
     if (field) {
       this[field] = event.target.value;
     }
+    this.showError = false; // Reset error message when user inputs data
   }
 
   //handleChild Componente servicos
@@ -151,15 +155,7 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
     this.isChecked = event.target.checked;
     console.log("não chamar", this.isChecked);
   }
-  // validação de input
-  // validate(){
-  //     if (condition) {
 
-  //     } else {
-
-  //     }
-  // }
-  //aciona o botão
   handleReset(event) {
     const inputFields = this.template.querySelectorAll("lightning-input-field");
     if (inputFields) {
@@ -182,12 +178,26 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
 
   validatePhone(phone) {
     // Validate phone format
-    const phoneRegex = /^[0-9]{10,}$/; // You may need to adjust the regex based on your phone number format
+    const phoneRegex = /^[0-9]{10,}$/;
     return phoneRegex.test(phone);
+  }
+  validateCEP(cep) {
+    // Validate CEP format
+    const cepRegex = /^\d{8}$/ ///^[0-9]{5}-[0-9]{3}$/;
+    return cepRegex.test(cep);
   }
   handleSalvar() {
     console.log("Aciounou botão");
-    if (!this.name || !this.sobrenome || !this.email || !this.cpf ) {
+    if (
+      !this.name ||
+      !this.sobrenome ||
+      !this.email ||
+      !this.cpf ||
+      !this.cep ||
+      !this.servico ||
+      !this.equipamento ||
+      !this.phone
+    ) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
@@ -195,6 +205,18 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
           variant: "error",
         })
       );
+      let fieldErrorMsg = "Por favor insira o";
+      this.template.querySelectorAll("lightning-input,lightning-combobox").forEach((item) => {
+        let fieldValue = item.value;
+        let fieldLabel = item.label;
+        if (!fieldValue) {
+          item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
+        } else {
+          item.setCustomValidity("");
+        }
+        item.reportValidity();
+      });
+
       return;
     } else if (!this.validateCPF(this.cpf)) {
       this.dispatchEvent(
@@ -209,21 +231,31 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Error",
-          message: "Formato de E-email inválido. Introduza um endereço de E-email válido.",
+          message:
+            "Formato de E-email inválido. Introduza um endereço de E-email válido.",
           variant: "error",
         })
       );
       return;
-    // } else if (!this.validatePhone(this.phone)) {
-    //   this.dispatchEvent(
-    //     new ShowToastEvent({
-    //       title: "Error",
-    //       message:
-    //         "Formato de número de telefone inválido. Introduza um número de telefone válido.",
-    //       variant: "error",
-    //     })
-    //   );
-    //   return;
+    } else if (!this.validatePhone(this.phone)) {
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Error",
+          message:
+            "Formato de número de telefone inválido. Introduza um número de telefone válido.",
+          variant: "error",
+        })
+      );
+      return;
+    } else if (!this.validateCEP(this.cep)) {
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Erro",
+          message: "Formato de CEP inválido. Por favor, digite um CEP válido.",
+          variant: "error",
+        })
+      );
+      return;
     } else {
       try {
         const result = createLeadPessoaFisicaRecord({
@@ -245,24 +277,18 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
           leadServico: this.servico,
           leadEquipamento: this.equipamento,
           LeadCompany: this.company,
-          leadRecordTypeId: this.selectedRecordTypeId
-        }).then((result) => {
-            this.dispatchEvent(
-              new ShowToastEvent({
-                title: "Sucesso",
-                message: "Record created successfully",
-                variant: "success",
-              })
-            );
+          leadRecordTypeId: this.selectedRecordTypeId,
+        })
+          .then(result => {
+            this.recordId = result;
+            this.navigateToRecordPage();
+            console.log('Result: ' + result);
+            console.log('recordId: ' + recordId);
+
           })
           .catch((error) => {
-            this.dispatchEvent(
-              new ShowToastEvent({
-                title: "Error creating record",
-                message: error.body.message,
-                variant: "error",
-              })
-            );
+                            console.error('Error creating lead:', error);
+
           });
 
         console.log("result", result);
@@ -287,7 +313,16 @@ export default class LeadPessoaFisica extends LightningElement /*LightningModal*
       }
     }
   }
-
+  navigateToRecordPage() {
+    this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: this.recordId,
+            objectApiName: 'Lead',
+            actionName: 'view',
+        },
+    });
+  }
   closeModal() {
     const event = new CustomEvent("closemodal");
     this.dispatchEvent(event);

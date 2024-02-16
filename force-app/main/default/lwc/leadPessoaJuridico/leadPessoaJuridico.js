@@ -7,8 +7,11 @@ import { options } from "c/leadUtils";
 import createLeadPessoaJuridicaRecord from "@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import LightningModal from "lightning/modal";
+import { NavigationMixin } from 'lightning/navigation';
 
-export default class LeadPessoaJuridico extends LightningModal {
+
+export default class LeadPessoaJuridico extends NavigationMixin(LightningElement) {
+  @api recordId 
   activeSections = ["info_pessoa", "info_servicos", "info_address"];
   activeSectionsMessage = "";
   tratamento;
@@ -46,30 +49,32 @@ export default class LeadPessoaJuridico extends LightningModal {
   numero;
   pais;
 
-  objectNameToGetRecordTypes = 'Lead';
+  objectNameToGetRecordTypes = "Lead";
   lstRecordTypes = [];
   selectedRecordTypeId;
   selectedRecordTypeName;
-  
-  @wire(getObjectInfo, { objectApiName: '$objectNameToGetRecordTypes' })
-  getObjectInfo({ error, data }) {
-      if (data) {
-          this.lstRecordTypes = [];
-          for (let key in data.recordTypeInfos) {
-              if (data.recordTypeInfos[key].name === 'Pessoa Juridica') {
-                  // Found the desired record type
-                  this.selectedRecordTypeId = key;
-                  this.selectedRecordTypeName = key.name;
-              }
-  
-              this.lstRecordTypes.push({ value: key, label: data.recordTypeInfos[key].name });
-          }
-      } else if (error) {
-          console.log('Error while getting record types');
-          this.lstRecordTypes = [];
-      }
-  }
 
+  @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
+  getObjectInfo({ error, data }) {
+    if (data) {
+      this.lstRecordTypes = [];
+      for (let key in data.recordTypeInfos) {
+        if (data.recordTypeInfos[key].name === "Pessoa Juridica") {
+          // Found the desired record type
+          this.selectedRecordTypeId = key;
+          this.selectedRecordTypeName = key.name;
+        }
+
+        this.lstRecordTypes.push({
+          value: key,
+          label: data.recordTypeInfos[key].name,
+        });
+      }
+    } else if (error) {
+      console.log("Error while getting record types");
+      this.lstRecordTypes = [];
+    }
+  }
 
   // LeadSource
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
@@ -107,7 +112,7 @@ export default class LeadPessoaJuridico extends LightningModal {
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfoIndustry({ error, data }) {
     if (data) {
-      this.objectInfoData = data; // if you still need it
+      this.objectInfoData = data; 
       this.defaultRecordTypeId = data.defaultRecordTypeId;
     } else if (error) {
       this.error = error;
@@ -189,9 +194,9 @@ export default class LeadPessoaJuridico extends LightningModal {
   }
   validateCNPJ(cnpj) {
     // Validate CNPJ format
-    const cnpjRegex =  /^\d{14}$/// /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+    const cnpjRegex = /^\d{14}$/; // /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
     return cnpjRegex.test(cnpj);
-}
+  }
 
   validateEmail(email) {
     // Validate email format
@@ -204,10 +209,15 @@ export default class LeadPessoaJuridico extends LightningModal {
     const phoneRegex = /^[0-9]{10,}$/; // You may need to adjust the regex based on your phone number format
     return phoneRegex.test(phone);
   }
+  validateCEP(cep) {
+    // Validate CEP format
+    const cepRegex =/^\d{8}$/; // /^[0-9]{5}-[0-9]{3}$/;
+    return cepRegex.test(cep);
+  }
   //aciona o botão
   handleOkay() {
     console.log("Acionou botão");
-    if (!this.name || !this.sobrenome || !this.email || !this.cnpj) {
+    if (!this.name || !this.sobrenome || !this.email || !this.cnpj || !this.cep || !this.servico || ! this.equipamento || !this.phone || !this.empresa) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
@@ -215,17 +225,31 @@ export default class LeadPessoaJuridico extends LightningModal {
           variant: "error",
         })
       );
+      let fieldErrorMsg = "Por favor insira o";
+      this.template.querySelectorAll("lightning-input,lightning-combobox").forEach((item) => {
+        let fieldValue = item.value;
+        let fieldLabel = item.label;
+        if (!fieldValue) {
+          item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
+        } else {
+          item.setCustomValidity("");
+        }
+        item.reportValidity();
+      });
       return;
-    } else if (!this.validateCNPJ(this.cnpj)) {
-        this.dispatchEvent(
-            new ShowToastEvent({
-                title: 'Erro',
-                message: 'Formato de CNPJ inválido. Por favor, digite um CNPJ válido.',
-                variant: 'error'
-            })
-        );
-        return;
-    } else if (!this.validateEmail(this.email)) {
+    }
+    if (!this.validateCNPJ(this.cnpj)) {
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Erro",
+          message:
+            "Formato de CNPJ inválido. Por favor, digite um CNPJ válido.",
+          variant: "error",
+        })
+      );
+      return;
+    }
+    if (!this.validateEmail(this.email)) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Error",
@@ -235,7 +259,8 @@ export default class LeadPessoaJuridico extends LightningModal {
         })
       );
       return;
-    } else if (!this.validatePhone(this.phone)) {
+    }
+    if (!this.validatePhone(this.phone)) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Error",
@@ -245,68 +270,90 @@ export default class LeadPessoaJuridico extends LightningModal {
         })
       );
       return;
-    } else {
-      try {
-        const result = createLeadPessoaJuridicaRecord({
-          leadSalutation: this.tratamento,
-          leadFirstName: this.name,
-          leadLastName: this.sobrenome,
-          leadEmail: this.email,
-          leadCnpj: this.cnpj,
-          leadEmpresa: this.empresa,
-          leadSetor: this.setor,
-          leadCargo: this.cargo,
-          leadPhone: this.phone,
-          leadOrigem: this.origemLead,
-          leadDoNotCall: this.isChecked,
-          leadWebsite: this.website,
-          leadCep: this.cep,
-          leadRua: this.rua,
-          leadNumero: this.numero,
-          leadComplemento: this.complemento,
-          leadBairro: this.bairro,
-          leadCidade: this.cidade,
-          leadEstado: this.estado,
-          leadPais: this.pais,
-          leadServico: this.servico,
-          leadEquipamento: this.equipamento,
-          leadRecordTypeId: this.selectedRecordTypeId
-        })
-          .then((result) => {
-            this.dispatchEvent(
-              new ShowToastEvent({
-                title: "Success",
-                message: "Record created successfully",
-                variant: "success",
-              })
-            );
-          })
-          .catch((error) => {
-            this.dispatchEvent(
-              new ShowToastEvent({
-                title: "Error creating record",
-                message: error.body.message,
-                variant: "error",
-              })
-            );
-          });
-      } catch (error) {
-        console.error(error);
-        // Extrair a mensagem de erro da exceção
-        let errorMessage = "Ocorreu um erro ao criar a avaliação.";
-        if (error.body && error.body.message) {
-          errorMessage = error.body.message;
-        }
-        // Exibir uma mensagem de erro
-        this.dispatchEvent(
-          new ShowToastEvent({
-            title: "Erro",
-            message: "Ocorreu um erro ao criar a avaliação." + errorMessage,
-            variant: "error",
-          })
-        );
-      }
     }
+    if (!this.validateCEP(this.cep)) {
+      this.dispatchEvent(
+          new ShowToastEvent({
+              title: 'Erro',
+              message: 'Formato de CEP inválido. Por favor, digite um CEP válido.',
+              variant: 'error'
+          })
+      );
+      return;
+    }
+  
+    try {
+      const result = createLeadPessoaJuridicaRecord({
+        leadSalutation: this.tratamento,
+        leadFirstName: this.name,
+        leadLastName: this.sobrenome,
+        leadEmail: this.email,
+        leadCnpj: this.cnpj,
+        leadEmpresa: this.empresa,
+        leadSetor: this.setor,
+        leadCargo: this.cargo,
+        leadPhone: this.phone,
+        leadOrigem: this.origemLead,
+        leadDoNotCall: this.isChecked,
+        leadWebsite: this.website,
+        leadCep: this.cep,
+        leadRua: this.rua,
+        leadNumero: this.numero,
+        leadComplemento: this.complemento,
+        leadBairro: this.bairro,
+        leadCidade: this.cidade,
+        leadEstado: this.estado,
+        leadPais: this.pais,
+        leadServico: this.servico,
+        leadEquipamento: this.equipamento,
+        leadRecordTypeId: this.selectedRecordTypeId,
+      })
+      .then(result => {
+        this.recordId = result;
+        this.navigateToRecordPage();
+        console.log('Result: ' + result);
+        console.log('recordId: ' + recordId);
+
+      })
+
+        .catch((error) => {
+          // let menssageErrorDuplicate = ''; 
+          //Error creating lead: Insert failed. First exception on row 0; first error: NUMBER_OUTSIDE_VALID_RANGE, CEP: value outside of valid range on numeric field: 12345678912354: [CEP__c]
+          // if(error.body.message.includes('DUPLICATES_DETECTED')){ 
+          //  menssageErrorDuplicate =  'Valores Duplicados';
+          // }
+          console.error('Error creating lead:', error);
+
+        });
+        console.log("result", result);
+
+        this.closeModal();
+    } catch (error) {
+      console.error(error);
+      // Extrair a mensagem de erro da exceção
+      let errorMessage = "Ocorreu um erro ao criar a avaliação.";
+      if (error.body && error.body.message) {
+        errorMessage = error.body.message;
+      }
+      // Exibir uma mensagem de erro
+      this.dispatchEvent(
+        new ShowToastEvent({
+          title: "Erro",
+          message: "Ocorreu um erro ao criar a avaliação." + errorMessage,
+          variant: "error",
+        })
+      );
+    }
+  }
+  navigateToRecordPage() {
+    this[NavigationMixin.Navigate]({
+        type: 'standard__recordPage',
+        attributes: {
+            recordId: this.recordId,
+            objectApiName: 'Lead',
+            actionName: 'view',
+        },
+    });
   }
   closeModal() {
     const event = new CustomEvent("closemodal");
