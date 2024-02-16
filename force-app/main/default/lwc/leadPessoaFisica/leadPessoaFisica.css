@@ -16,13 +16,11 @@
 .slds-accordion__list-item{
   border-top-style:none;
 } 
-
-/* Set background color for the accordion section header */
-.slds-accordion__section-header {
-  background-color: #F3F2F2; /* Change this to your desired color */
+.slds-accordion{
+  --slds-c-accordion-summary-color-background: #F3F2F2;
 }
 
-/* Set background color for the accordion section content */
-.slds-accordion__section-content {
-  background-color: #F3F2F2; /* Change this to your desired color */
+.my-style{
+  padding:0;
+
 }

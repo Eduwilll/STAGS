@@ -2,14 +2,14 @@
   <lightning-modal-header >
     <h2 class="slds-text-heading_medium">Novo Lead</h2>
   </lightning-modal-header>
-    <lightning-modal-body> 
+    <lightning-modal-body > 
         <!-- accordion -->
         <lightning-accordion 
                             allow-multiple-sections-open
                             onsectiontoggle={handleToggleSection}
                             active-section-name={activeSections}
                             class="accordion-pessoa-fisica">
-            <lightning-accordion-section name="info_pessoa" label="Informações do Lead pessoa física">
+            <lightning-accordion-section name="info_pessoa" label="Informações do Lead pessoa física" class="my-style">
                 <!-- Info Pessoas -->
 
                 <lightning-layout
@@ -19,7 +19,7 @@
                 >  
                   <lightning-layout-item 
                     flexibility="auto" padding="horizontal-medium"
-                    class="custom-column"
+                    class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
                   >
                  
                     <lightning-combobox
@@ -51,6 +51,11 @@
                     type="text"
                     label="CPF" required
                     message-when-value-missing="Preencha este campo"
+                    message-when-pattern-mismatch="O CPF deve estar no formato 12345678901"
+                    pattern="\d{11}"
+                    max-length="11"
+                    formatter="decimal"
+                    title="O CPF deve estar no formato ser apenas numeros"
                     name="cpf"
                     onchange={handleChange} 
                     ></lightning-input>
@@ -58,7 +63,7 @@
                   <!-- left -->
                   <lightning-layout-item 
                   flexibility="auto" padding="horizontal-medium"
-                  class="custom-column left-column">
+                  class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
                   <lightning-combobox
                     name="origemLead"
                     label="Origem do Lead"
@@ -72,6 +77,7 @@
                     type="email" 
                     name="email"
                     label="E-mail" required
+                    message-when-value-missing="Preencha este campo"
                     onchange={handleChange} 
 
                     ></lightning-input>
@@ -79,6 +85,11 @@
                     <lightning-input 
                     type="tel" 
                     label="Telefone" required
+                    message-when-value-missing="Preencha este campo"
+                    message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
+                    pattern="\d{11}"
+                    max-length="11"
+                    formatter="decimal"
                     name="phone" 
                     value={phone}
                     onchange={handleChange} 

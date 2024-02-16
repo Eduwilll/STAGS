@@ -1,3 +1,21 @@
 .slds-accordion__list-item{
     border-top-style:none;
-  } 
+  }
+  .slds-accordion{
+    --slds-c-accordion-summary-color-background: #F3F2F2;
+    --slds-c-accordion-sizing-border: 3px;
+  }
+.slds-accordion__list-item .slds-accordion__summary-content {
+  padding: 0;
+  }
+.slds-accordion__list-item.info-pessoa .slds-accordion__summary-content {
+    background-color: #F3F2F2; /* Adicione a cor desejada para "Informações do Lead pessoa jurídica" */
+  }
+  
+.slds-accordion__list-item.info-servicos .slds-accordion__summary-content {
+    background-color: #F3F2F2; /* Adicione a cor desejada para "Informações de serviço" */
+  }
+  
+.slds-accordion__list-item.info-address .slds-accordion__summary-content {
+    background-color: #F3F2F2; /* Adicione a cor desejada para "Informações de endereço" */
+  }

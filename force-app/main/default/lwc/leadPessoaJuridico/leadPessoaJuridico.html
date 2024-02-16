@@ -9,14 +9,14 @@
                             allow-multiple-sections-open
                             onsectiontoggle={handleToggleSection}
                             active-section-name={activeSections}>
-            <lightning-accordion-section name="info_pessoa" label="Informações do Lead pessoa juridica">
+            <lightning-accordion-section class="block info-pessoa" name="info_pessoa" label="Informações do Lead pessoa juridica">
                 <!-- Info Pessoas -->
 
                 <lightning-layout
                   multiple-rows
                   pull-to-boundary="medium"
                 >  
-                  <lightning-layout-item 
+                  <lightning-layout-item class=" slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
                     flexibility="auto" padding="horizontal-medium"
                   >
                  
@@ -27,6 +27,7 @@
                     placeholder=""
                     options={options}
                     onchange={handleChange} 
+                    data-type="tratamento"
                     ></lightning-combobox>
 
                     <lightning-input 
@@ -51,6 +52,10 @@
                     type="text"
                     label="CNPJ" required
                     message-when-value-missing="Preencha este campo"
+                    message-when-pattern-mismatch="O CNPJ deve conter 14 numerais apenas"
+                    pattern="\d{14}"
+                    max-length="14"
+                    formatter="decimal"
                     name="cnpj"
                     onchange={handleChange} 
                     ></lightning-input>
@@ -74,7 +79,7 @@
                     ></lightning-input>
                   </lightning-layout-item>
                   <!-- left -->
-                  <lightning-layout-item 
+                  <lightning-layout-item class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
                     flexibility="auto" padding="horizontal-medium"
                   >
                   <lightning-combobox
@@ -112,17 +117,24 @@
                     <lightning-input 
                     type="tel" 
                     label="Telefone" required
+                    message-when-value-missing="Preencha este campo"
+                    message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
+                    pattern="\d{11}"
+                    max-length="11"
+                    formatter="decimal"
                     name="phone" 
                     value={phone}
                     onchange={handleChange} 
                     ></lightning-input>
                     <!-- ATENCAO DA UM JEITO NISSO -->
-                    <label class="slds-m-bottom_medium">Não chamar</label>
 
-                    <div class="container">
+
+                    <div class="slds-m-top_x-medium">
+                      <label class="slds-m-top_x-small" style="display: block;">Não chamar</label>
                         <input 
                             type="checkbox" 
                             checked={isChecked}
+                            aria-label="teste"
                             name="isChecked"
                             onchange={handleChangeCheck} />
                     </div>
@@ -139,12 +151,12 @@
                 
                 <!--/Info Pessoas -->
             </lightning-accordion-section>
-            <lightning-accordion-section name="info_servicos" label="Informações de serviço">
+            <lightning-accordion-section class="info-servicos" name="info_servicos" label="Informações de serviço">
               
               <c-novo-lead-servicos onchild={handleChildInfoServicos}></c-novo-lead-servicos>
 
             </lightning-accordion-section>
-            <lightning-accordion-section name="info_address" label="Informações de endereço">
+            <lightning-accordion-section class="info-address" name="info_address" label="Informações de endereço">
                 <c-novo-lead-endereco onequipamentos={handleChildInfoEndereco}></c-novo-lead-endereco>
             </lightning-accordion-section>
 
