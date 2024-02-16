@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 02-07-2024
+ * @last modified on  : 02-14-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -17,7 +17,7 @@ public with sharing class LeadControllerTest {
         Decimal leadCpf = 123456701;
         String leadOrigem = 'Web';
         Boolean leadDoNotCall = false;
-        String leadCep = '12345678';
+        Decimal leadCep = 12345678;
         String leadRua = 'Main St';
         Decimal leadNumero = 123;
         String leadComplemento = 'Apt 456';
@@ -28,11 +28,12 @@ public with sharing class LeadControllerTest {
         String leadServico = 'Venda';
         String leadEquipamento = 'LG';
         String LeadCompany = 'XYZ Inc.';
+        String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get('Pessoa Física').getRecordTypeId();
+
 
         Test.startTest();
         try {
-         LeadController.createLeadPessoaFisicaRecord(leadFirstName, leadLastName, leadEmail, leadPhone, leadCpf, leadOrigem, leadDoNotCall, leadCep, leadRua, leadNumero, leadComplemento, leadBairro, leadCidade, leadEstado, leadPais, leadServico, leadEquipamento, LeadCompany);
-            
+            LeadController.createLeadPessoaFisicaRecord(leadFirstName, leadLastName, leadEmail, leadPhone, leadCpf, leadOrigem, leadDoNotCall, leadCep, leadRua, leadNumero, leadComplemento, leadBairro, leadCidade, leadEstado, leadPais, leadServico, leadEquipamento, LeadCompany, leadRecordTypeId);
         } catch (Exception e) {
             throw new AuraHandledException('Error creating lead: ' + e.getMessage());
 
@@ -41,8 +42,8 @@ public with sharing class LeadControllerTest {
         Test.stopTest();
 
         Lead createdLead = [SELECT Id, FirstName, LastName, Email, Phone, CPF__c, LeadSource, DoNotCall,
-                            PostalCode, Street, Numero__c, Complemento__c, Bairro__c, City, State, Country,
-                            Tipo_Servico__c, Equipamento__c, Company
+                            CEP__c, Street, Numero__c, Complemento__c, Bairro__c, City, State, Country,
+                            Tipo_Servico__c, Equipamento__c, Company,RecordTypeId  
                             FROM Lead  LIMIT 1];
 
         System.assertEquals(leadFirstName, createdLead.FirstName);
@@ -52,7 +53,7 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadCpf, createdLead.CPF__c);
         System.assertEquals(leadOrigem, createdLead.LeadSource);
         System.assertEquals(leadDoNotCall, createdLead.DoNotCall);
-        System.assertEquals(leadCep, createdLead.PostalCode);
+        System.assertEquals(leadCep, createdLead.CEP__c);
         System.assertEquals(leadRua, createdLead.Street);
         System.assertEquals(leadNumero, createdLead.Numero__c);
         System.assertEquals(leadComplemento, createdLead.Complemento__c);
@@ -63,6 +64,8 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadServico, createdLead.Tipo_Servico__c);
         System.assertEquals(leadEquipamento, createdLead.Equipamento__c);
         System.assertEquals(LeadCompany, createdLead.Company);
+        System.assertEquals(leadRecordTypeId, createdLead.RecordTypeId);
+
     }
 
     @isTest
@@ -79,7 +82,7 @@ public with sharing class LeadControllerTest {
         String leadOrigem = 'Web';
         Boolean leadDoNotCall = false;
         String leadWebsite = 'http://www.example.com';
-        String leadCep = '12345678';
+        Decimal leadCep = 12345678;
         String leadRua = 'Main St';
         Decimal leadNumero = 123;
         String leadComplemento = 'Apt 456';
@@ -90,10 +93,11 @@ public with sharing class LeadControllerTest {
         String leadServico = 'Venda';
         String leadEquipamento = 'LG';
 
+        String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get('Pessoa Juridica').getRecordTypeId();
+
         Test.startTest();
         try {
-         LeadController.createLeadPessoaJuridicaRecord(leadSalutation, leadFirstName, leadLastName, leadEmail, leadPhone, leadCnpj, leadEmpresa, leadSetor, leadCargo, leadOrigem, leadDoNotCall, leadWebsite, leadCep, leadRua, leadNumero, leadComplemento, leadBairro, leadCidade, leadEstado, leadPais, leadServico, leadEquipamento);
-            
+            LeadController.createLeadPessoaJuridicaRecord(leadSalutation, leadFirstName, leadLastName, leadEmail, leadPhone, leadCnpj, leadEmpresa, leadSetor, leadCargo, leadOrigem, leadDoNotCall, leadWebsite, leadCep, leadRua, leadNumero, leadComplemento, leadBairro, leadCidade, leadEstado, leadPais, leadServico, leadEquipamento, leadRecordTypeId);
         } catch (Exception e) {
             throw new AuraHandledException('Error creating lead: ' + e.getMessage());
         }
@@ -101,8 +105,8 @@ public with sharing class LeadControllerTest {
         Test.stopTest();
 
         Lead createdLead = [SELECT Id, Salutation, FirstName, LastName, Email, Phone, CNPJ__c, Company, Industry,
-                            LeadSource, DoNotCall, Website, PostalCode, Street, Numero__c, Complemento__c, Bairro__c,
-                            City, State, Country, Tipo_Servico__c, Equipamento__c , Title
+                            LeadSource, DoNotCall, Website, CEP__c, Street, Numero__c, Complemento__c, Bairro__c,
+                            City, State, Country, Tipo_Servico__c, Equipamento__c , Title,RecordTypeId  
                             FROM Lead  LIMIT 1];
 
         System.assertEquals(leadSalutation, createdLead.Salutation);
@@ -117,7 +121,7 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadOrigem, createdLead.LeadSource);
         System.assertEquals(leadDoNotCall, createdLead.DoNotCall);
         System.assertEquals(leadWebsite, createdLead.Website);
-        System.assertEquals(leadCep, createdLead.PostalCode);
+        System.assertEquals(leadCep, createdLead.CEP__c);
         System.assertEquals(leadRua, createdLead.Street);
         System.assertEquals(leadNumero, createdLead.Numero__c);
         System.assertEquals(leadComplemento, createdLead.Complemento__c);
@@ -127,5 +131,7 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadPais, createdLead.Country);
         System.assertEquals(leadServico, createdLead.Tipo_Servico__c);
         System.assertEquals(leadEquipamento, createdLead.Equipamento__c);
+        System.assertEquals(leadRecordTypeId, createdLead.RecordTypeId);
     }
+   
 }

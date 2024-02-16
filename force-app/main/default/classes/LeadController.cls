@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 02-06-2024
+ * @last modified on  : 02-14-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -17,9 +17,9 @@ public with sharing class LeadController {
     // record insert de pessoa Fisica
     @AuraEnabled
     public static Id createLeadPessoaFisicaRecord(String leadFirstName, String leadLastName, String leadEmail, String leadPhone, Decimal leadCpf,
-                                                  String leadOrigem, Boolean leadDoNotCall, String leadCep, String leadRua, Decimal leadNumero,
+                                                  String leadOrigem, Boolean leadDoNotCall, Decimal leadCep, String leadRua, Decimal leadNumero,
                                                   String leadComplemento, String leadBairro, String leadCidade, String leadEstado, String leadPais,
-                                                  String leadServico, String leadEquipamento,String LeadCompany) {
+                                                  String leadServico, String leadEquipamento,String LeadCompany, Id leadRecordTypeId) {
         Lead newLead = new Lead(
             FirstName = leadFirstName,
             LastName = leadLastName,
@@ -28,7 +28,7 @@ public with sharing class LeadController {
             CPF__c = leadCpf,
             LeadSource = leadOrigem,
             DoNotCall = leadDoNotCall,
-            PostalCode = leadCep,
+            CEP__c = leadCep,
             Street = leadRua,
             Numero__c = leadNumero,
             Complemento__c = leadComplemento,
@@ -38,7 +38,9 @@ public with sharing class LeadController {
             Country = leadPais,
             Tipo_Servico__c = leadServico,
             Equipamento__c = leadEquipamento,
-            Company = LeadCompany
+            Company = LeadCompany,
+            RecordTypeId = leadRecordTypeId
+
         );
 
         try {
@@ -53,8 +55,8 @@ public with sharing class LeadController {
     @AuraEnabled
     public static Id createLeadPessoaJuridicaRecord(String leadSalutation,String leadFirstName, String leadLastName, String leadEmail, String leadPhone, Decimal leadCnpj,
                                                     String leadEmpresa,String leadSetor ,String leadCargo, String leadOrigem, Boolean leadDoNotCall,String leadWebsite, 
-                                                    String leadCep, String leadRua, Decimal leadNumero,String leadComplemento, String leadBairro,
-                                                    String leadCidade, String leadEstado, String leadPais,String leadServico, String leadEquipamento) {
+                                                    Decimal leadCep, String leadRua, Decimal leadNumero,String leadComplemento, String leadBairro,
+                                                    String leadCidade, String leadEstado, String leadPais,String leadServico, String leadEquipamento ,Id leadRecordTypeId) {
         Lead newLead = new Lead(
             Salutation = leadSalutation,
             FirstName = leadFirstName,
@@ -68,8 +70,8 @@ public with sharing class LeadController {
             LeadSource = leadOrigem,
             DoNotCall = leadDoNotCall,
             Website = leadWebsite,
-            PostalCode = leadCep,
-            Street = leadRua,
+            CEP__c = leadCep, //CEP__c
+            Street = leadRua, //
             Numero__c = leadNumero,
             Complemento__c = leadComplemento,
             Bairro__c = leadBairro, 
@@ -77,7 +79,9 @@ public with sharing class LeadController {
             State = leadEstado,
             Country = leadPais, 
             Tipo_Servico__c = leadServico,
-            Equipamento__c = leadEquipamento
+            Equipamento__c = leadEquipamento,
+            RecordTypeId = leadRecordTypeId
+
         );
         System.debug('entou no método'+ newLead);
         try {
