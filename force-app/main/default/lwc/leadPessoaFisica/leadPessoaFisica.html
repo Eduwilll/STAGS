@@ -1,11 +1,6 @@
 <template>
   <lightning-modal-header >
     <h2 class="slds-text-heading_medium">Novo Lead</h2>
-    <div class="slds-card">
-      <lightning-combobox name="fieldList" label='Field List' options={lstRecordTypes} placeholder="Select Field"></lightning-combobox>
-  </div>
-  <p>{selectedRecordTypeId}</p>
-  <p>{selectedRecordTypeName}</p>
   </lightning-modal-header>
     <lightning-modal-body> 
         <!-- accordion -->
@@ -76,18 +71,19 @@
                     <lightning-input 
                     type="email" 
                     name="email"
-                    label="Email" required
+                    label="E-mail" required
                     onchange={handleChange} 
 
                     ></lightning-input>
 
                     <lightning-input 
                     type="tel" 
-                    label="Telefone" 
+                    label="Telefone" required
                     name="phone" 
                     value={phone}
                     onchange={handleChange} 
                     ></lightning-input>
+                    
                     <!-- ATENCAO DA UM JEITO NISSO -->
                     <label class="slds-m-bottom_medium">Não chamar</label>
 

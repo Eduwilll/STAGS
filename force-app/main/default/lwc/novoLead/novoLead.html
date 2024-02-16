@@ -12,12 +12,14 @@
           vertical-align="center"
         >
           <lightning-layout-item>
+            <span style="color: red;">* </span>
+
                 <label label class="slds-form-element__label" for="unique-id-of-input" >Qual tipo de lead deseja Criar?</label>
           </lightning-layout-item>
-          <lightning-layout-item class="">
+          <lightning-layout-item class="slds-p-top_medium">
             <lightning-radio-group 
             name="recordType" 
-            label="Que tipo de lead deseja criar" required 
+            label=""  
             options={recordTypeOptions} 
             value={selectedRecordType} 
             onchange={handleRecordTypeChange}>

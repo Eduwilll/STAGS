@@ -1,0 +1,28 @@
+/* .custom-columns {
+    display: flex;
+
+    margin: 2px 2px 0 0;
+  }
+
+.custom-column {
+    flex: 1;
+    padding: 0 2px 0 0;
+  }
+
+.left-column{
+    padding-left: 240px;
+}
+*/
+.slds-accordion__list-item{
+  border-top-style:none;
+} 
+
+/* Set background color for the accordion section header */
+.slds-accordion__section-header {
+  background-color: #F3F2F2; /* Change this to your desired color */
+}
+
+/* Set background color for the accordion section content */
+.slds-accordion__section-content {
+  background-color: #F3F2F2; /* Change this to your desired color */
+}
