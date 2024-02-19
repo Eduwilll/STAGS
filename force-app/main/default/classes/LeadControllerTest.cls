@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 02-14-2024
+ * @last modified on  : 02-19-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -42,7 +42,7 @@ public with sharing class LeadControllerTest {
         Test.stopTest();
 
         Lead createdLead = [SELECT Id, FirstName, LastName, Email, Phone, CPF__c, LeadSource, DoNotCall,
-                            CEP__c, Street, Numero__c, Complemento__c, Bairro__c, City, State, Country,
+                            CEP__c, Rua__c, Numero__c, Complemento__c, Bairro__c, Cidade__c, Estado_Provincia__c, Pais__c,
                             Tipo_Servico__c, Equipamento__c, Company,RecordTypeId  
                             FROM Lead  LIMIT 1];
 
@@ -54,13 +54,13 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadOrigem, createdLead.LeadSource);
         System.assertEquals(leadDoNotCall, createdLead.DoNotCall);
         System.assertEquals(leadCep, createdLead.CEP__c);
-        System.assertEquals(leadRua, createdLead.Street);
+        System.assertEquals(leadRua, createdLead.Rua__c);
         System.assertEquals(leadNumero, createdLead.Numero__c);
         System.assertEquals(leadComplemento, createdLead.Complemento__c);
         System.assertEquals(leadBairro, createdLead.Bairro__c);
-        System.assertEquals(leadCidade, createdLead.City);
-        System.assertEquals(leadEstado, createdLead.State);
-        System.assertEquals(leadPais, createdLead.Country);
+        System.assertEquals(leadCidade, createdLead.Cidade__c);
+        System.assertEquals(leadEstado, createdLead.Estado_Provincia__c);
+        System.assertEquals(leadPais, createdLead.Pais__c);
         System.assertEquals(leadServico, createdLead.Tipo_Servico__c);
         System.assertEquals(leadEquipamento, createdLead.Equipamento__c);
         System.assertEquals(LeadCompany, createdLead.Company);
@@ -105,8 +105,8 @@ public with sharing class LeadControllerTest {
         Test.stopTest();
 
         Lead createdLead = [SELECT Id, Salutation, FirstName, LastName, Email, Phone, CNPJ__c, Company, Industry,
-                            LeadSource, DoNotCall, Website, CEP__c, Street, Numero__c, Complemento__c, Bairro__c,
-                            City, State, Country, Tipo_Servico__c, Equipamento__c , Title,RecordTypeId  
+                            LeadSource, DoNotCall, Website, CEP__c, Rua__c, Numero__c, Complemento__c, Bairro__c,
+                            Cidade__c, Estado_Provincia__c, Pais__c, Tipo_Servico__c, Equipamento__c , Title,RecordTypeId  
                             FROM Lead  LIMIT 1];
 
         System.assertEquals(leadSalutation, createdLead.Salutation);
@@ -122,13 +122,13 @@ public with sharing class LeadControllerTest {
         System.assertEquals(leadDoNotCall, createdLead.DoNotCall);
         System.assertEquals(leadWebsite, createdLead.Website);
         System.assertEquals(leadCep, createdLead.CEP__c);
-        System.assertEquals(leadRua, createdLead.Street);
+        System.assertEquals(leadRua, createdLead.Rua__c);
         System.assertEquals(leadNumero, createdLead.Numero__c);
         System.assertEquals(leadComplemento, createdLead.Complemento__c);
         System.assertEquals(leadBairro, createdLead.Bairro__c);
-        System.assertEquals(leadCidade, createdLead.City);
-        System.assertEquals(leadEstado, createdLead.State);
-        System.assertEquals(leadPais, createdLead.Country);
+        System.assertEquals(leadCidade, createdLead.Cidade__c);
+        System.assertEquals(leadEstado, createdLead.Estado_Provincia__c);
+        System.assertEquals(leadPais, createdLead.Pais__c);
         System.assertEquals(leadServico, createdLead.Tipo_Servico__c);
         System.assertEquals(leadEquipamento, createdLead.Equipamento__c);
         System.assertEquals(leadRecordTypeId, createdLead.RecordTypeId);
