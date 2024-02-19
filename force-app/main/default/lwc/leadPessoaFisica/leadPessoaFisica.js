@@ -188,6 +188,8 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   }
   handleSalvar() {
     console.log("Aciounou botão");
+        const requiredFields = ['name', 'sobrenome', 'email', 'cnpj', 'cep', 'servico', 'equipamento', 'phone', 'empresa'];
+
     if (
       !this.name ||
       !this.sobrenome ||
@@ -206,9 +208,12 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
         })
       );
       let fieldErrorMsg = "Por favor insira o";
-      this.template.querySelectorAll("lightning-input,lightning-combobox").forEach((item) => {
+      this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
         let fieldValue = item.value;
         let fieldLabel = item.label;
+        
+
+        
         if (!fieldValue) {
           item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
         } else {

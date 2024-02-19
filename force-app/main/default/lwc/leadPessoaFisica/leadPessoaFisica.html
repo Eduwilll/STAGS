@@ -26,6 +26,7 @@
                     name="tratamento"
                     label="Tratamento"
                     value={value}
+                    data-element="subscribe-checkbox"
                     placeholder=""
                     options={options}
                     onchange={handleChange} 
@@ -36,6 +37,7 @@
                     label="Primeiro nome" required
                     message-when-value-missing="Preencha este campo"
                     name="name"
+                    data-element="required"
                     onchange={handleChange} 
                     ></lightning-input>
 
@@ -44,6 +46,8 @@
                     label="Sobrenome" required
                     message-when-value-missing="Preencha este campo"
                     name="sobrenome"
+                    data-element="required"
+
                     onchange={handleChange} 
                     ></lightning-input>
 
@@ -57,6 +61,7 @@
                     formatter="decimal"
                     title="O CPF deve estar no formato ser apenas numeros"
                     name="cpf"
+                    data-element="required"
                     onchange={handleChange} 
                     ></lightning-input>
                   </lightning-layout-item>
@@ -77,6 +82,7 @@
                     type="email" 
                     name="email"
                     label="E-mail" required
+                    data-element="required"
                     message-when-value-missing="Preencha este campo"
                     onchange={handleChange} 
 
@@ -91,6 +97,7 @@
                     max-length="11"
                     formatter="decimal"
                     name="phone" 
+                    data-element="required"
                     value={phone}
                     onchange={handleChange} 
                     ></lightning-input>
