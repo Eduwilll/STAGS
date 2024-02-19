@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 02-14-2024
+ * @last modified on  : 02-19-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -29,13 +29,13 @@ public with sharing class LeadController {
             LeadSource = leadOrigem,
             DoNotCall = leadDoNotCall,
             CEP__c = leadCep,
-            Street = leadRua,
+            Rua__c = leadRua,
             Numero__c = leadNumero,
             Complemento__c = leadComplemento,
             Bairro__c = leadBairro,
-            City = leadCidade,
-            State = leadEstado,
-            Country = leadPais,
+            Cidade__c = leadCidade,
+            Estado_Provincia__c = leadEstado,
+            Pais__c = leadPais,
             Tipo_Servico__c = leadServico,
             Equipamento__c = leadEquipamento,
             Company = LeadCompany,
@@ -71,13 +71,13 @@ public with sharing class LeadController {
             DoNotCall = leadDoNotCall,
             Website = leadWebsite,
             CEP__c = leadCep, //CEP__c
-            Street = leadRua, //
+            Rua__c = leadRua, //
             Numero__c = leadNumero,
             Complemento__c = leadComplemento,
             Bairro__c = leadBairro, 
-            City = leadCidade,
-            State = leadEstado,
-            Country = leadPais, 
+            Cidade__c = leadCidade,
+            Estado_Provincia__c = leadEstado,
+            Pais__c = leadPais, 
             Tipo_Servico__c = leadServico,
             Equipamento__c = leadEquipamento,
             RecordTypeId = leadRecordTypeId
