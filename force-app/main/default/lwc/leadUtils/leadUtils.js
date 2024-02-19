@@ -11,37 +11,11 @@ const options = () => {
   ];
 };
 
-export default class LeadUtils extends LightningElement {
-  @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
-  wireObjectInfo({ error, data }) {
-    if (data) {
-      this.objectInfoData = data;
-      this.defaultRecordTypeId = data.defaultRecordTypeId;
-    } else if (error) {
-      this.error = error;
-      this.defaultRecordTypeId = undefined;
-      console.error("Error:", error);
-    }
-  }
-
-  @wire(getPicklistValues, {
-    recordTypeId: "$defaultRecordTypeId",
-    fieldApiName: LEAD_ORIGIN_SOURCE,
-  })
-  pickValues({ error, data }) {
-    if (data) {
-      this.optionsLead = data.values.map((plValue) => ({
-        label: plValue.label,
-        value: plValue.value,
-      }));
-    } else if (error) {
-      console.error("Error:", error);
-    }
-  }
-  @api
-  getOptionsLead() {
-    return this.optionsLead;
-  }
+export function validateCNPJ(cnpj) {
+  // Validate CNPJ format
+  const cnpjRegex = /^\d{14}$/; // /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
+  return cnpjRegex.test(cnpj);
 }
+
 
 export { options };

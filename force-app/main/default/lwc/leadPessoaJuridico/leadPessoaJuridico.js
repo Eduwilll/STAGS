@@ -3,7 +3,7 @@ import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import LEAD_OBJECT from "@salesforce/schema/Lead";
 import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 import LEAD_INDUSTRY from "@salesforce/schema/Lead.Industry";
-import { options } from "c/leadUtils";
+import { options, validateCNPJ } from "c/leadUtils";
 import createLeadPessoaJuridicaRecord from "@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import LightningModal from "lightning/modal";
@@ -25,7 +25,7 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
   setor;
   origemLead;
   phone;
-  selectedLead = "None";
+  selectedLead = "";
   optionsLead;
   objectInfoData;
   defaultRecordTypeId;
@@ -192,11 +192,7 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     this.isChecked = event.target.checked;
     console.log("não chamar", this.isChecked);
   }
-  validateCNPJ(cnpj) {
-    // Validate CNPJ format
-    const cnpjRegex = /^\d{14}$/; // /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
-    return cnpjRegex.test(cnpj);
-  }
+ 
 
   validateEmail(email) {
     // Validate email format
@@ -214,10 +210,44 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     const cepRegex =/^\d{8}$/; // /^[0-9]{5}-[0-9]{3}$/;
     return cepRegex.test(cep);
   }
+
+  handleInvokeChildMethodEndereco() {
+    // Obter uma referência para o componente filho
+    const childComponent = this.template.querySelector('c-novo-lead-endereco');
+    // Invocar o método inputValidade no componente filho
+    if (childComponent) {
+        childComponent.inputValidade();
+    }
+  }
+  handleInvokeChildMethodServico() {
+    // Obter uma referência para o componente filho
+    const childComponent = this.template.querySelector('c-novo-lead-servicos');
+    console.log(childComponent)
+    console.log(typeof(childComponent))
+    // Invocar o método inputValidade no componente filho
+    if (childComponent) {
+        childComponent.inputValidade();
+    }
+  }
   //aciona o botão
-  handleOkay() {
-    console.log("Acionou botão");
-    if (!this.name || !this.sobrenome || !this.email || !this.cnpj || !this.cep || !this.servico || ! this.equipamento || !this.phone || !this.empresa) {
+  async handleOkay() {
+    console.log("Botão acionado");
+    if (
+      !this.name ||
+      !this.sobrenome ||
+      !this.cnpj ||
+      !this.email ||
+      !this.empresa||
+      !this.cargo||
+      !this.setor||
+      !this.origemLead||
+      !this.email ||
+      !this.phone ||
+      !this.servico ||
+      !this.equipamento ||
+      !this.cep 
+
+    ) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
@@ -226,9 +256,12 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
         })
       );
       let fieldErrorMsg = "Por favor insira o";
-      this.template.querySelectorAll("lightning-input,lightning-combobox").forEach((item) => {
+      this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
         let fieldValue = item.value;
         let fieldLabel = item.label;
+        
+
+        
         if (!fieldValue) {
           item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
         } else {
@@ -236,54 +269,59 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
         }
         item.reportValidity();
       });
+
+       // Invocar o método inputValidade no componente filho
+       this.handleInvokeChildMethodEndereco();
+       this.handleInvokeChildMethodServico();
       return;
     }
-    if (!this.validateCNPJ(this.cnpj)) {
+  
+    if (!validateCNPJ(this.cnpj)) {
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
-          message:
-            "Formato de CNPJ inválido. Por favor, digite um CNPJ válido.",
+          message: "Formato de CNPJ inválido. Por favor, digite um CNPJ válido.",
           variant: "error",
         })
       );
       return;
     }
+  
     if (!this.validateEmail(this.email)) {
       this.dispatchEvent(
         new ShowToastEvent({
-          title: "Error",
-          message:
-            "Formato de E-email inválido. Introduza um endereço de E-email válido.",
+          title: "Erro",
+          message: "Formato de e-mail inválido. Por favor, digite um e-mail válido.",
           variant: "error",
         })
       );
       return;
     }
+  
     if (!this.validatePhone(this.phone)) {
       this.dispatchEvent(
         new ShowToastEvent({
-          title: "Error",
-          message:
-            "Formato de número de telefone inválido. Introduza um número de telefone válido.",
+          title: "Erro",
+          message: "Formato de número de telefone inválido. Por favor, digite um número de telefone válido.",
           variant: "error",
         })
       );
       return;
     }
+  
     if (!this.validateCEP(this.cep)) {
       this.dispatchEvent(
-          new ShowToastEvent({
-              title: 'Erro',
-              message: 'Formato de CEP inválido. Por favor, digite um CEP válido.',
-              variant: 'error'
-          })
+        new ShowToastEvent({
+          title: "Erro",
+          message: "Formato de CEP inválido. Por favor, digite um CEP válido.",
+          variant: "error",
+        })
       );
       return;
     }
   
     try {
-      const result = createLeadPessoaJuridicaRecord({
+      const result =  await createLeadPessoaJuridicaRecord({
         leadSalutation: this.tratamento,
         leadFirstName: this.name,
         leadLastName: this.sobrenome,
@@ -308,41 +346,32 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
         leadEquipamento: this.equipamento,
         leadRecordTypeId: this.selectedRecordTypeId,
       })
-      .then(result => {
-        this.recordId = result;
-        this.navigateToRecordPage();
-        console.log('Result: ' + result);
-        console.log('recordId: ' + recordId);
+      this.recordId = result;
 
-      })
+      this.navigateToRecordPage();
+      console.log('Result: ' + result);
 
-        .catch((error) => {
-          // let menssageErrorDuplicate = ''; 
-          //Error creating lead: Insert failed. First exception on row 0; first error: NUMBER_OUTSIDE_VALID_RANGE, CEP: value outside of valid range on numeric field: 12345678912354: [CEP__c]
-          // if(error.body.message.includes('DUPLICATES_DETECTED')){ 
-          //  menssageErrorDuplicate =  'Valores Duplicados';
-          // }
-          console.error('Error creating lead:', error);
-
-        });
-        console.log("result", result);
-
-        this.closeModal();
+    
     } catch (error) {
-      console.error(error);
-      // Extrair a mensagem de erro da exceção
-      let errorMessage = "Ocorreu um erro ao criar a avaliação.";
-      if (error.body && error.body.message) {
-        errorMessage = error.body.message;
+      console.error('Error creating lead:', error);
+    
+      let menssageErrorDuplicate = '';
+      // Error message handling
+      if (error.body.message.includes('DUPLICATES_DETECTED')) {
+        menssageErrorDuplicate = 'Valores Duplicados';
       }
-      // Exibir uma mensagem de erro
+    
       this.dispatchEvent(
         new ShowToastEvent({
           title: "Erro",
-          message: "Ocorreu um erro ao criar a avaliação." + errorMessage,
+          // Use the correct variable name 'error.message' instead of just 'error'
+          message: "Ocorreu um erro ao criar a avaliação." + menssageErrorDuplicate,
           variant: "error",
         })
       );
+    } finally {
+      // Move this block outside the catch block to ensure it always executes
+      this.closeModal();
     }
   }
   navigateToRecordPage() {

@@ -3,14 +3,16 @@
                   multiple-rows
                   pull-to-boundary="medium"
                 >
-                  <lightning-layout-item flexibility="auto" padding="horizontal-medium">
+                  <lightning-layout-item flexibility="auto" padding="around-large">
                     <lightning-input 
                       type="text" 
                       name="cep" 
                       label="CEP" required 
                       message-when-value-missing="Preencha este campo"
                       message-when-pattern-mismatch="Apenas numeros"
-                      pattern="\d{8}"
+                      data-element="required"
+                      pattern="[0-9]{8}"
+                      max-length="8"
                       value={cep}
                       onchange={handleChange}
                     ></lightning-input>
@@ -37,8 +39,11 @@
                       onchange={handleChange}
                     ></lightning-input>
                   </lightning-layout-item>
-
-                  <lightning-layout-item flexibility="auto" padding="horizontal-medium">
+                  <lightning-layout-item >
+                    <div class="slds-p-horizontal_xx-large"></div>
+              
+                  </lightning-layout-item>
+                  <lightning-layout-item flexibility="auto" padding="around-large">
                     <lightning-input 
                       type="text"
                       label="Bairro"
@@ -71,5 +76,6 @@
                       onchange={handleChange}
                     ></lightning-input>
                   </lightning-layout-item>
+                
                 </lightning-layout>
 </template>

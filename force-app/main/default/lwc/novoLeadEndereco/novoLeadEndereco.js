@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement,api } from 'lwc';
 
 export default class NovoLeadEndereco extends LightningElement {
     cep;
@@ -31,6 +31,26 @@ export default class NovoLeadEndereco extends LightningElement {
                 key8: this.pais
             }
             });
-            this.dispatchEvent(eventer);
+        this.dispatchEvent(eventer);
+            
+    }
+    @api
+    inputValidade(){
+        let fieldErrorMsg = "Por favor insira o";
+        this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
+          let fieldValue = item.value;
+          let fieldLabel = item.label;
+          
+  
+          
+          if (!fieldValue) {
+            item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
+          } else {
+            item.setCustomValidity("");
+          }
+          item.reportValidity();
+        });
+  
+        return;
     }
 }

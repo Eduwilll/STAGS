@@ -18,8 +18,8 @@
                   class="custom-columns"
                 >  
                   <lightning-layout-item 
-                    flexibility="auto" padding="horizontal-medium"
-                    class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
+                    flexibility="auto" padding="around-large"
+                    
                   >
                  
                     <lightning-combobox
@@ -36,6 +36,7 @@
                     type="text"
                     label="Primeiro nome" required
                     message-when-value-missing="Preencha este campo"
+                    placeholder="First name"
                     name="name"
                     data-element="required"
                     onchange={handleChange} 
@@ -47,7 +48,7 @@
                     message-when-value-missing="Preencha este campo"
                     name="sobrenome"
                     data-element="required"
-
+                    placeholder="Last name"
                     onchange={handleChange} 
                     ></lightning-input>
 
@@ -58,6 +59,7 @@
                     message-when-pattern-mismatch="O CPF deve estar no formato 12345678901"
                     pattern="\d{11}"
                     max-length="11"
+                    placeholder="***********"
                     formatter="decimal"
                     title="O CPF deve estar no formato ser apenas numeros"
                     name="cpf"
@@ -65,10 +67,14 @@
                     onchange={handleChange} 
                     ></lightning-input>
                   </lightning-layout-item>
+                  <lightning-layout-item >
+                    <div class="slds-p-horizontal_xx-large"></div>
+              
+                  </lightning-layout-item>
                   <!-- left -->
                   <lightning-layout-item 
-                  flexibility="auto" padding="horizontal-medium"
-                  class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2">
+                  flexibility="auto" padding="around-large"
+                  >
                   <lightning-combobox
                     name="origemLead"
                     label="Origem do Lead"
@@ -102,15 +108,16 @@
                     onchange={handleChange} 
                     ></lightning-input>
                     
-                    <!-- ATENCAO DA UM JEITO NISSO -->
-                    <label class="slds-m-bottom_medium">Não chamar</label>
-
-                    <div class="container">
+                    <div class="slds-m-top_medium">
+                      <label class="slds-m-top_x-small" style="display: block;">Não chamar</label>
                         <input 
                             type="checkbox" 
-                            checked={isChecked} 
+                            checked={isChecked}
+                            aria-label="teste"
+                            name="isChecked"
                             onchange={handleChangeCheck} />
                     </div>
+
                   </lightning-layout-item>
                 </lightning-layout>
                 
@@ -123,7 +130,7 @@
 
             </lightning-accordion-section>
             <lightning-accordion-section name="info_address" label="Informações de endereço">
-              <c-novo-lead-endereco onequipamentos={handleChildInfoEndereco}></c-novo-lead-endereco>
+              <c-novo-lead-endereco onequipamentos={handleChildInfoEndereco} onvalidate={validateInput}></c-novo-lead-endereco>
             </lightning-accordion-section>
 
         </lightning-accordion>

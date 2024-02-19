@@ -1,4 +1,4 @@
-import { LightningElement } from 'lwc';
+import { LightningElement, api } from 'lwc';
 
 export default class NovoLeadServicos extends LightningElement {
     valueServicoes = '';
@@ -36,6 +36,25 @@ export default class NovoLeadServicos extends LightningElement {
             }
             });
             this.dispatchEvent(eventer);
+    }
+    @api
+    inputValidade(){
+        let fieldErrorMsg = "Por favor insira o";
+        this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
+          let fieldValue = item.value;
+          let fieldLabel = item.label;
+          
+  
+          
+          if (!fieldValue) {
+            item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
+          } else {
+            item.setCustomValidity("");
+          }
+          item.reportValidity();
+        });
+  
+        return;
     }
 }
    

@@ -8,8 +8,8 @@ export default class NovoLead extends LightningModal {
     selectRecordJuridico = false;
     selectRecord = true;
     recordTypeOptions = [
-        { label: 'Pessoa Fisica', value: 'PessoaFisica' },
-        { label: 'Pessoa Juridica', value: 'PessoaJuridica' }
+        { label: 'Pessoa Física', value: 'PessoaFisica' },
+        { label: 'Pessoa Jurídica', value: 'PessoaJuridica' }
     ];
     
     handleRecordTypeChange(event) {

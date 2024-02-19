@@ -1,31 +1,33 @@
 <template>
-    <lightning-layout 
-             multiple-rows
-                  pull-to-boundary="medium"
-  >
-    <lightning-layout-item flexibility="auto" padding="horizontal-medium">
-      <lightning-combobox
-        name="servico"
-        label="Tipo de Serviço" required
-        message-when-value-missing="Selecione o serviço"
-        placeholder=""
-        value={valueServicoes}
-        options={servicos}
-        onchange={handleChange} 
+  <lightning-layout multiple-rows pull-to-boundary="medium">
+      <lightning-layout-item flexibility="auto" padding="horizontal-large">
+          <lightning-combobox
+              name="servico"
+              label="Tipo de Serviço" required
+              message-when-value-missing="Selecione o serviço"
+              data-element="required"
+              placeholder=""
+              value={valueServicoes}
+              options={servicos}
+              onchange={handleChange} 
+              
+          ></lightning-combobox>
+      </lightning-layout-item>
+    <lightning-layout-item >
+      <div class="slds-p-horizontal_xx-large"></div>
 
-      ></lightning-combobox>
-    </lightning-layout-item >
-    <lightning-layout-item flexibility="auto" padding="horizontal-medium">
-      <lightning-combobox
-        name="equipamento"
-        label="Equipamento" required
-        message-when-value-missing="Selecione o Equipamento"
-        placeholder=""
-        options={equipamentos}
-        onchange={handleChange} 
-
-      ></lightning-combobox>
     </lightning-layout-item>
-  </lightning-layout>
 
+      <lightning-layout-item flexibility="auto" padding="horizontal-large">
+          <lightning-combobox
+              name="equipamento"
+              label="Equipamento" required
+              message-when-value-missing="Selecione o Equipamento"
+              data-element="required"
+              placeholder=""
+              options={equipamentos}
+              onchange={handleChange} 
+          ></lightning-combobox>
+      </lightning-layout-item>
+  </lightning-layout>
 </template>

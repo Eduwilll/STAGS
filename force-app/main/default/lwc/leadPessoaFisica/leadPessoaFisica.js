@@ -10,7 +10,6 @@ import { NavigationMixin } from 'lightning/navigation';
 //import LightningModal from 'lightning/modal';
 
 export default class LeadPessoaFisica extends NavigationMixin(LightningElement) /*LightningModal*/ {
-  @api recordId;
   activeSections = ["info_pessoa", "info_servicos", "info_address"];
   activeSectionsMessage = "";
   valueLead = "";
@@ -156,14 +155,6 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
     console.log("não chamar", this.isChecked);
   }
 
-  handleReset(event) {
-    const inputFields = this.template.querySelectorAll("lightning-input-field");
-    if (inputFields) {
-      inputFields.forEach((field) => {
-        field.reset();
-      });
-    }
-  }
   validateCPF(cpf) {
     // Validate CPF format
     const cpfRegex = /^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$/;
@@ -186,19 +177,39 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
     const cepRegex = /^\d{8}$/ ///^[0-9]{5}-[0-9]{3}$/;
     return cepRegex.test(cep);
   }
-  handleSalvar() {
-    console.log("Aciounou botão");
-        const requiredFields = ['name', 'sobrenome', 'email', 'cnpj', 'cep', 'servico', 'equipamento', 'phone', 'empresa'];
 
+  handleInvokeChildMethodEndereco() {
+    // Obter uma referência para o componente filho
+    const childComponent = this.template.querySelector('c-novo-lead-endereco');
+    console.log(childComponent)
+    console.log(typeof(childComponent))
+    // Invocar o método inputValidade no componente filho
+    if (childComponent) {
+        childComponent.inputValidade();
+    }
+}
+  handleInvokeChildMethodServico() {
+    // Obter uma referência para o componente filho
+    const childComponent = this.template.querySelector('c-novo-lead-servicos');
+    console.log(childComponent)
+    console.log(typeof(childComponent))
+    // Invocar o método inputValidade no componente filho
+    if (childComponent) {
+        childComponent.inputValidade();
+    }
+}
+async handleSalvar() {
+    console.log("Aciounou botão");
+    
     if (
       !this.name ||
       !this.sobrenome ||
-      !this.email ||
       !this.cpf ||
-      !this.cep ||
+      !this.email ||
+      !this.phone ||
       !this.servico ||
       !this.equipamento ||
-      !this.phone
+      !this.cep 
     ) {
       this.dispatchEvent(
         new ShowToastEvent({
@@ -222,7 +233,9 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
         item.reportValidity();
       });
 
-      return;
+       // Invocar o método inputValidade no componente filho
+       this.handleInvokeChildMethodEndereco();
+       this.handleInvokeChildMethodServico();
     } else if (!this.validateCPF(this.cpf)) {
       this.dispatchEvent(
         new ShowToastEvent({
@@ -263,7 +276,7 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
       return;
     } else {
       try {
-        const result = createLeadPessoaFisicaRecord({
+        const result = await createLeadPessoaFisicaRecord({
           leadFirstName: this.name,
           leadLastName: this.sobrenome,
           leadEmail: this.email,
@@ -298,7 +311,6 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
 
         console.log("result", result);
 
-        //this.handleReset();
         this.closeModal();
       } catch (error) {
         console.error(error);

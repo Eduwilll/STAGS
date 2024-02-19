@@ -1,9 +1,10 @@
 <template>
+  <div class="custom-modal-content">
   <lightning-modal-header >
     <h2 class="slds-text-heading_medium">Novo Lead</h2>
 
   </lightning-modal-header>
-    <lightning-modal-body> 
+    <lightning-modal-body s> 
         <!-- accordion -->
         <lightning-accordion 
                             allow-multiple-sections-open
@@ -16,8 +17,8 @@
                   multiple-rows
                   pull-to-boundary="medium"
                 >  
-                  <lightning-layout-item class=" slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
-                    flexibility="auto" padding="horizontal-medium"
+                  <lightning-layout-item
+                    flexibility="auto" padding="around-large"
                   >
                  
                     <lightning-combobox
@@ -34,6 +35,7 @@
                     type="text"
                     label="Primeiro nome" required
                     message-when-value-missing="Preencha este campo"
+                    data-element="required"
                     name="name"
                     placeholder="First name"
                     onchange={handleChange} 
@@ -45,6 +47,7 @@
                     message-when-value-missing="Preencha este campo"
                     name="sobrenome"
                     placeholder="Last name"
+                    data-element="required"
                     onchange={handleChange} 
                     ></lightning-input>
 
@@ -53,6 +56,8 @@
                     label="CNPJ" required
                     message-when-value-missing="Preencha este campo"
                     message-when-pattern-mismatch="O CNPJ deve conter 14 numerais apenas"
+                    data-element="required"
+                    placeholder="CNPJ*"
                     pattern="\d{14}"
                     max-length="14"
                     formatter="decimal"
@@ -63,6 +68,7 @@
                     <lightning-input 
                       type="text"
                       label="Empresa" required
+                      data-element="required"
                       message-when-value-missing="Preencha este campo"
                       name="empresa"
                       placeholder="Company"
@@ -72,44 +78,50 @@
                     <lightning-input 
                       type="text"
                       label="Cargo" required
+                      data-element="required"
                       message-when-value-missing="Preencha este campo"
                       name="cargo"
                       placeholder="Title"
                       onchange={handleChange}
                     ></lightning-input>
                   </lightning-layout-item>
+                  <lightning-layout-item >
+                    <div class="slds-p-horizontal_xx-large"></div>
+              
+                  </lightning-layout-item>
                   <!-- left -->
-                  <lightning-layout-item class="slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-2"
-                    flexibility="auto" padding="horizontal-medium"
+                  <lightning-layout-item 
+                    flexibility="auto" padding="around-large"
                   >
                   <lightning-combobox
                     label="Setor" required
+                    data-element="required"
                     message-when-value-missing="Preencha este campo"
                     name="setor"
                     options={optionsSetor}
                     onchange={handleChange} 
-                    placeholder=""
+                    placeholder="Industry"
                     value={value}
                     variant="standard"
-                     
-                     
-                     
                   ></lightning-combobox>
                     
-                    <lightning-combobox
-                      name="origemLead"
-                      label="Origem do Lead"
-                      value={selectedLead}
-                      placeholder=""
-                      options={optionsLead}
-                      onchange={handleChange} >
-                    </lightning-combobox>
+                  <lightning-combobox
+                    name="origemLead"
+                    label="Origem do Lead" required
+                    data-element="required"
+                    value={selectedLead}
+                    placeholder=""
+                    options={optionsLead}
+                    onchange={handleChange} >
+                  </lightning-combobox>
                    
                     <lightning-input 
                     type="email" 
                     name="email"
+                    data-element="required"
                     label="E-mail" required
                     message-when-value-missing="Preencha este campo"
+                    message-when-bad-input="Digite um E-email valido"
                     onchange={handleChange} 
 
                     ></lightning-input>
@@ -117,6 +129,7 @@
                     <lightning-input 
                     type="tel" 
                     label="Telefone" required
+                    data-element="required"
                     message-when-value-missing="Preencha este campo"
                     message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
                     pattern="\d{11}"
@@ -129,7 +142,7 @@
                     <!-- ATENCAO DA UM JEITO NISSO -->
 
 
-                    <div class="slds-m-top_x-medium">
+                    <div class="slds-m-top_medium">
                       <label class="slds-m-top_x-small" style="display: block;">Não chamar</label>
                         <input 
                             type="checkbox" 
@@ -167,4 +180,5 @@
         <lightning-button class="slds-button" variant="neutral" label="Cancelar" onclick={closeModal} ></lightning-button>
         <lightning-button class="slds-button" variant='brand' label="Salvar" onclick={handleOkay}></lightning-button>
     </lightning-modal-footer>
+  </div>
 </template>
