@@ -6,7 +6,6 @@ import LEAD_INDUSTRY from "@salesforce/schema/Lead.Industry";
 import { options, validateCNPJ } from "c/leadUtils";
 import createLeadPessoaJuridicaRecord from "@salesforce/apex/LeadController.createLeadPessoaJuridicaRecord";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import LightningModal from "lightning/modal";
 import { NavigationMixin } from 'lightning/navigation';
 
 
@@ -54,13 +53,13 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
   selectedRecordTypeId;
   selectedRecordTypeName;
 
+  // Wire service para pegar o recordTypeId de Pessoa Juridica
   @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
   getObjectInfo({ error, data }) {
     if (data) {
       this.lstRecordTypes = [];
       for (let key in data.recordTypeInfos) {
         if (data.recordTypeInfos[key].name === "Pessoa Juridica") {
-          // Found the desired record type
           this.selectedRecordTypeId = key;
           this.selectedRecordTypeName = key.name;
         }
@@ -76,7 +75,7 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     }
   }
 
-  // LeadSource
+  // Wire service para pegar o recordTypeId ser usado to get picklist Origem do Lead (Lead Source) e Setor (Industry)
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfoLeadSource({ error, data }) {
     if (data) {
@@ -93,7 +92,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     recordTypeId: "$defaultRecordTypeId",
     fieldApiName: LEAD_ORIGIN_SOURCE,
   })
-  pickValues({ error, data }) {
+  // get picklist Lead Source
+  pickListLeadSourceValues({ error, data }) {
     if (data) {
       this.optionsLead = data.values.map((plValue) => {
         return {
@@ -106,26 +106,12 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     }
   }
 
-  //Industry/setor
-  objectInfoData;
-  defaultRecordTypeId;
-  @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
-  wireObjectInfoIndustry({ error, data }) {
-    if (data) {
-      this.objectInfoData = data; 
-      this.defaultRecordTypeId = data.defaultRecordTypeId;
-    } else if (error) {
-      this.error = error;
-      this.defaultRecordTypeId = undefined;
-      console.log("error" + error);
-    }
-  }
-
+  // get picklist Industry
   @wire(getPicklistValues, {
     recordTypeId: "$defaultRecordTypeId",
     fieldApiName: LEAD_INDUSTRY,
   })
-  pickValues2({ error, data }) {
+  pickListIndustryValues({ error, data }) {
     if (data) {
       this.optionsSetor = data.values.map((inValue) => {
         return {
@@ -140,8 +126,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
 
   // atribui o valor para o a variavel com base no evento name;
   handleChange(event) {
-    console.log(event.target.name);
-    console.log(event.target.value);
+    // console.log(event.target.name);
+    // console.log(event.target.value);
     const field = event.target.name;
     if (field) {
       this[field] = event.target.value;
@@ -153,8 +139,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     this.servico = event.detail.key10;
     this.equipamento = event.detail.key11;
 
-    console.log("servicos:", this.servico);
-    console.log("equipamento", this.equipamento);
+    // console.log("servicos:", this.servico);
+    // console.log("equipamento", this.equipamento);
   }
   //handleChild Componente endereco
   handleChildInfoEndereco(event) {
@@ -168,14 +154,14 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     this.numero = event.detail.key7;
     this.pais = event.detail.key8;
 
-    console.log("cep", this.cep);
-    console.log("bairro:", this.bairro);
-    console.log("rua", this.rua);
-    console.log("cidade:", this.cidade);
-    console.log("estado", this.estado);
-    console.log("complemento:", this.complemento);
-    console.log("numero", this.numero);
-    console.log("pais:", this.pais);
+    // console.log("cep", this.cep);
+    // console.log("bairro:", this.bairro);
+    // console.log("rua", this.rua);
+    // console.log("cidade:", this.cidade);
+    // console.log("estado", this.estado);
+    // console.log("complemento:", this.complemento);
+    // console.log("numero", this.numero);
+    // console.log("pais:", this.pais);
   }
   //aciona os accordion
   handleToggleSection(event) {
@@ -229,9 +215,11 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
         childComponent.inputValidade();
     }
   }
-  //aciona o botão
+
+  // metodo botão que ao acionado faz a validacao e o envidos dos dados para o lead controller.
   async handleOkay() {
-    console.log("Botão acionado");
+    
+    // chega se os campos estão preenchidos
     if (
       !this.name ||
       !this.sobrenome ||
@@ -255,6 +243,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
           variant: "error",
         })
       );
+      
+      // Checa se os campos com required estão preenchidos e enviar uma mensagem custom.
       let fieldErrorMsg = "Por favor insira o";
       this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
         let fieldValue = item.value;
@@ -286,7 +276,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
       );
       return;
     }
-  
+    
+    //validação regex
     if (!this.validateEmail(this.email)) {
       this.dispatchEvent(
         new ShowToastEvent({
@@ -321,6 +312,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
     }
   
     try {
+      
+      //insert the lead pessoa juridica
       const result =  await createLeadPessoaJuridicaRecord({
         leadSalutation: this.tratamento,
         leadFirstName: this.name,
@@ -346,11 +339,12 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
         leadEquipamento: this.equipamento,
         leadRecordTypeId: this.selectedRecordTypeId,
       })
-      this.recordId = result;
 
-      this.navigateToRecordPage();
-      console.log('Result: ' + result);
+      this.recordId = result; // recebendo o id do record lead criado
 
+      this.navigateToRecordPage();// redirecionar para o lead record criado
+      
+      //console.log('Result: ' + result);
     
     } catch (error) {
       console.error('Error creating lead:', error);
@@ -374,6 +368,8 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
       this.closeModal();
     }
   }
+
+  // metodo para redirecionar para o record Page
   navigateToRecordPage() {
     this[NavigationMixin.Navigate]({
         type: 'standard__recordPage',

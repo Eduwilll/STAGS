@@ -1,20 +1,21 @@
 /**
- * @description       : 
+ * @description       : Está classe é responsavel por fazer a inserção dos leads na org.
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 02-19-2024
+ * @last modified on  : 21-02-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
 public with sharing class LeadController {
 
+    // Esse método não está em uso no momento
+    // Metodo para recuperar o recordTypeId
     // public static Id getRecordType(){
     //     String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get('selectedRecordType').getRecordTypeId();
-        
-
     // }
 
-    // record insert de pessoa Fisica
+    
+    // Método para criação de um novo record lead de pessoa Fisica
     @AuraEnabled
     public static Id createLeadPessoaFisicaRecord(String leadFirstName, String leadLastName, String leadEmail, String leadPhone, Decimal leadCpf,
                                                   String leadOrigem, Boolean leadDoNotCall, Decimal leadCep, String leadRua, Decimal leadNumero,
@@ -44,14 +45,18 @@ public with sharing class LeadController {
         );
 
         try {
+
             insert newLead;
             return newLead.Id;
+
         } catch (Exception e) {
+
             throw new AuraHandledException('Error creating lead: ' + e.getMessage());
+
         }
     }
 
-    // record insert de pessoa Juridica
+    // Método para criação de um novo record lead de pessoa Juridica
     @AuraEnabled
     public static Id createLeadPessoaJuridicaRecord(String leadSalutation,String leadFirstName, String leadLastName, String leadEmail, String leadPhone, Decimal leadCnpj,
                                                     String leadEmpresa,String leadSetor ,String leadCargo, String leadOrigem, Boolean leadDoNotCall,String leadWebsite, 
@@ -83,13 +88,16 @@ public with sharing class LeadController {
             RecordTypeId = leadRecordTypeId
 
         );
-        System.debug('entou no método'+ newLead);
+
         try {
 
             insert newLead;
             return newLead.Id;
+
         } catch (Exception e) {
+
             throw new AuraHandledException('Error creating lead: ' + e.getMessage());
+            
         }
 
     }

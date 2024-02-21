@@ -1,15 +1,13 @@
-import { LightningElement, api, wire } from "lwc";
+import { LightningElement, wire } from "lwc";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
+import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { NavigationMixin } from "lightning/navigation";
 import LEAD_OBJECT from "@salesforce/schema/Lead";
 import LEAD_ORIGIN_SOURCE from "@salesforce/schema/Lead.LeadSource";
 import { options } from "c/leadUtils";
 import createLeadPessoaFisicaRecord from "@salesforce/apex/LeadController.createLeadPessoaFisicaRecord";
-import { ShowToastEvent } from "lightning/platformShowToastEvent";
-import { NavigationMixin } from 'lightning/navigation';
 
-//import LightningModal from 'lightning/modal';
-
-export default class LeadPessoaFisica extends NavigationMixin(LightningElement) /*LightningModal*/ {
+export default class LeadPessoaFisica extends NavigationMixin(LightningElement) {
   activeSections = ["info_pessoa", "info_servicos", "info_address"];
   activeSectionsMessage = "";
   valueLead = "";
@@ -24,8 +22,10 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   optionsLead;
   defaultRecordTypeId;
   objectInfoData;
+
   // pickList para Tratamento
   options = options();
+
   //variaveis do tipo serviços
   servico;
   equipamento;
@@ -47,13 +47,13 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   selectedRecordTypeName;
   showError = false;
 
+  // Wire service para pegar o recordTypeId de Pessoa Fisica
   @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
   getObjectInfo({ error, data }) {
     if (data) {
       this.lstRecordTypes = [];
       for (let key in data.recordTypeInfos) {
         if (data.recordTypeInfos[key].name === "Pessoa Física") {
-          // Found the desired record type
           this.selectedRecordTypeId = key;
           this.selectedRecordTypeName = key.name;
         }
@@ -68,11 +68,11 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
       this.lstRecordTypes = [];
     }
   }
-
+  // Wire service para pegar o recordTypeId ser usado to get picklist Origem do Lead (Lead Source)
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfo({ error, data }) {
     if (data) {
-      this.objectInfoData = data; // if you still need it
+      this.objectInfoData = data;
       this.defaultRecordTypeId = data.defaultRecordTypeId;
     } else if (error) {
       this.error = error;
@@ -80,12 +80,12 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
       console.log("error" + error);
     }
   }
-
+  // get picklist Origem do Lead (Lead Source)
   @wire(getPicklistValues, {
     recordTypeId: "$defaultRecordTypeId",
     fieldApiName: LEAD_ORIGIN_SOURCE,
   })
-  pickValues({ error, data }) {
+  pickListLeadValues({ error, data }) {
     if (data) {
       this.optionsLead = data.values.map((plValue) => {
         return {
@@ -100,13 +100,12 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
 
   // atribui o valor para o a variavel com base no evento name;
   handleChange(event) {
-    console.log(event.target.name);
-    console.log(event.target.value);
+    // console.log(event.target.name);
+    // console.log(event.target.value);
     const field = event.target.name;
     if (field) {
       this[field] = event.target.value;
     }
-    this.showError = false; // Reset error message when user inputs data
   }
 
   //handleChild Componente servicos
@@ -115,8 +114,8 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
     this.servico = event.detail.key10;
     this.equipamento = event.detail.key11;
 
-    console.log("servicos:", this.servico);
-    console.log("equipamento", this.equipamento);
+    // console.log("servicos:", this.servico);
+    // console.log("equipamento", this.equipamento);
   }
   //handleChild Componente endereco
   handleChildInfoEndereco(event) {
@@ -130,16 +129,17 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
     this.numero = event.detail.key7;
     this.pais = event.detail.key8;
 
-    console.log("cep", this.cep);
-    console.log("bairro:", this.bairro);
-    console.log("rua", this.rua);
-    console.log("cidade:", this.cidade);
-    console.log("estado", this.estado);
-    console.log("complemento:", this.complemento);
-    console.log("numero", this.numero);
-    console.log("pais:", this.pais);
+    // console.log("cep", this.cep);
+    // console.log("bairro:", this.bairro);
+    // console.log("rua", this.rua);
+    // console.log("cidade:", this.cidade);
+    // console.log("estado", this.estado);
+    // console.log("complemento:", this.complemento);
+    // console.log("numero", this.numero);
+    // console.log("pais:", this.pais);
   }
-  //aciona os accordion
+
+  // functions que aciona os accordion
   handleToggleSection(event) {
     const openSections = event.detail.openSections;
 
@@ -174,33 +174,36 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   }
   validateCEP(cep) {
     // Validate CEP format
-    const cepRegex = /^\d{8}$/ ///^[0-9]{5}-[0-9]{3}$/;
+    const cepRegex = /^\d{8}$/; ///^[0-9]{5}-[0-9]{3}$/;
     return cepRegex.test(cep);
   }
 
   handleInvokeChildMethodEndereco() {
-    // Obter uma referência para o componente filho
-    const childComponent = this.template.querySelector('c-novo-lead-endereco');
-    console.log(childComponent)
-    console.log(typeof(childComponent))
+    // Obter referência para o componente filho
+    const childComponent = this.template.querySelector("c-novo-lead-endereco");
+    // console.log(childComponent);
+    // console.log(typeof childComponent);
     // Invocar o método inputValidade no componente filho
     if (childComponent) {
-        childComponent.inputValidade();
+      childComponent.inputValidade();
     }
-}
+  }
   handleInvokeChildMethodServico() {
-    // Obter uma referência para o componente filho
-    const childComponent = this.template.querySelector('c-novo-lead-servicos');
-    console.log(childComponent)
-    console.log(typeof(childComponent))
+    // Obter referência para o componente filho
+    const childComponent = this.template.querySelector("c-novo-lead-servicos");
+    // console.log(childComponent);
+    // console.log(typeof childComponent);
     // Invocar o método inputValidade no componente filho
     if (childComponent) {
-        childComponent.inputValidade();
+      childComponent.inputValidade();
     }
-}
-async handleSalvar() {
-    console.log("Aciounou botão");
-    
+  }
+
+  // metodo botão que ao acionado faz a validacao e o envidos dos dados para o lead controller.
+  async handleSalvar() {
+    //console.log("Aciounou botão");
+
+    // chega se os campos estão preenchidos
     if (
       !this.name ||
       !this.sobrenome ||
@@ -209,7 +212,7 @@ async handleSalvar() {
       !this.phone ||
       !this.servico ||
       !this.equipamento ||
-      !this.cep 
+      !this.cep
     ) {
       this.dispatchEvent(
         new ShowToastEvent({
@@ -218,24 +221,28 @@ async handleSalvar() {
           variant: "error",
         })
       );
+
+      // Checa se os campos com required estão preenchidos e enviar uma mensagem custom.
       let fieldErrorMsg = "Por favor insira o";
-      this.template.querySelectorAll('[data-element="required"]').forEach((item) => {
-        let fieldValue = item.value;
-        let fieldLabel = item.label;
-        
+      this.template
+        .querySelectorAll('[data-element="required"]')
+        .forEach((item) => {
+          let fieldValue = item.value;
+          let fieldLabel = item.label;
 
-        
-        if (!fieldValue) {
-          item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
-        } else {
-          item.setCustomValidity("");
-        }
-        item.reportValidity();
-      });
+          if (!fieldValue) {
+            item.setCustomValidity(fieldErrorMsg + " " + fieldLabel);
+          } else {
+            item.setCustomValidity("");
+          }
+          item.reportValidity();
+        });
 
-       // Invocar o método inputValidade no componente filho
-       this.handleInvokeChildMethodEndereco();
-       this.handleInvokeChildMethodServico();
+      // Invocar o método inputValidade no componente filho
+      this.handleInvokeChildMethodEndereco();
+      this.handleInvokeChildMethodServico();
+
+      //validação regex
     } else if (!this.validateCPF(this.cpf)) {
       this.dispatchEvent(
         new ShowToastEvent({
@@ -276,6 +283,7 @@ async handleSalvar() {
       return;
     } else {
       try {
+        //insert the lead pessoa fisica
         const result = await createLeadPessoaFisicaRecord({
           leadFirstName: this.name,
           leadLastName: this.sobrenome,
@@ -297,49 +305,56 @@ async handleSalvar() {
           LeadCompany: this.company,
           leadRecordTypeId: this.selectedRecordTypeId,
         })
-          .then(result => {
-            this.recordId = result;
-            this.navigateToRecordPage();
-            console.log('Result: ' + result);
-            console.log('recordId: ' + recordId);
-
+          .then((result) => {
+            this.recordId = result; // recebendo o id do record lead criado
+            this.navigateToRecordPage(); // redirecionar para o lead record criado
+            // console.log("Result: " + result);
+            // console.log("recordId: " + recordId);
           })
           .catch((error) => {
-                            console.error('Error creating lead:', error);
-
+            console.error("Error creating lead:", error);
           });
 
-        console.log("result", result);
+        //console.log("result", result);
 
         this.closeModal();
       } catch (error) {
-        console.error(error);
-        // Extrair a mensagem de erro da exceção
-        let errorMessage = "Ocorreu um erro ao criar a avaliação.";
-        if (error.body && error.body.message) {
-          errorMessage = error.body.message;
+        console.error('Error creating lead:', error);
+    
+        let menssageErrorDuplicate = '';
+        // Error message handling
+        if (error.body.message.includes('DUPLICATES_DETECTED')) {
+          menssageErrorDuplicate = 'Valores Duplicados';
         }
-        // Exibir uma mensagem de erro
+      
         this.dispatchEvent(
           new ShowToastEvent({
             title: "Erro",
-            message: "Ocorreu um erro ao criar a avaliação." + errorMessage,
+            // Use the correct variable name 'error.message' instead of just 'error'
+            message: "Ocorreu um erro ao criar a avaliação." + menssageErrorDuplicate,
             variant: "error",
           })
         );
+      } finally {
+        // Move this block outside the catch block to ensure it always executes
+        this.closeModal();
+      
       }
     }
   }
+
+  // metodo para redirecionar para o record Page
   navigateToRecordPage() {
     this[NavigationMixin.Navigate]({
-        type: 'standard__recordPage',
-        attributes: {
-            recordId: this.recordId,
-            objectApiName: 'Lead',
-            actionName: 'view',
-        },
+      type: "standard__recordPage",
+      attributes: {
+        recordId: this.recordId,
+        objectApiName: "Lead",
+        actionName: "view",
+      },
     });
   }
+
   closeModal() {
     const event = new CustomEvent("closemodal");
     this.dispatchEvent(event);

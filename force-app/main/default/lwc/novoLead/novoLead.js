@@ -1,6 +1,4 @@
-import { LightningElement } from 'lwc';
 import LightningModal from 'lightning/modal';
-import { NavigationMixin } from 'lightning/navigation';
 
 export default class NovoLead extends LightningModal {
     selectedRecordType = 'PessoaFisica';
