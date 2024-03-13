@@ -48,31 +48,9 @@ export default class LeadPessoaJuridico extends NavigationMixin(LightningElement
   numero;
   pais;
 
-  objectNameToGetRecordTypes = "Lead";
-  lstRecordTypes = [];
-  selectedRecordTypeId;
-  selectedRecordTypeName;
-
-  // Wire service para pegar o recordTypeId de Pessoa Juridica
-  @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
-  getObjectInfo({ error, data }) {
-    if (data) {
-      this.lstRecordTypes = [];
-      for (let key in data.recordTypeInfos) {
-        if (data.recordTypeInfos[key].name === "Pessoa Juridica") {
-          this.selectedRecordTypeId = key;
-          this.selectedRecordTypeName = key.name;
-        }
-
-        this.lstRecordTypes.push({
-          value: key,
-          label: data.recordTypeInfos[key].name,
-        });
-      }
-    } else if (error) {
-      console.log("Error while getting record types");
-      this.lstRecordTypes = [];
-    }
+  @api selectedRecordTypeId;
+  connectedCallback() {
+   console.log('LeadPessoaJuridica:',this.selectedRecordTypeId) 
   }
 
   // Wire service para pegar o recordTypeId ser usado to get picklist Origem do Lead (Lead Source) e Setor (Industry)

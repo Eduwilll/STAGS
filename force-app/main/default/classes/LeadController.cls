@@ -2,7 +2,7 @@
  * @description       : Está classe é responsavel por fazer a inserção dos leads na org.
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 21-02-2024
+ * @last modified on  : 13-03-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -10,9 +10,10 @@ public with sharing class LeadController {
 
     // Esse método não está em uso no momento
     // Metodo para recuperar o recordTypeId
-    // public static Id getRecordType(){
-    //     String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get('selectedRecordType').getRecordTypeId();
-    // }
+    @AuraEnabled
+    public static Id getLeadRecordTypeIdByName(String recordTypeName) {
+		return Schema.SObjectType.Lead.getRecordTypeInfosByName().get(recordTypeName).getRecordTypeId();
+	}
 
     
     // Método para criação de um novo record lead de pessoa Fisica

@@ -1,4 +1,4 @@
-import { LightningElement, wire } from "lwc";
+import { LightningElement, wire,api } from "lwc";
 import { getObjectInfo, getPicklistValues } from "lightning/uiObjectInfoApi";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
 import { NavigationMixin } from "lightning/navigation";
@@ -22,7 +22,12 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   optionsLead;
   defaultRecordTypeId;
   objectInfoData;
-
+  //record type Id 
+  
+  @api selectedRecordTypeId;
+  connectedCallback() {
+   console.log('LeadPessoaFisica:',this.selectedRecordTypeId) 
+  }
   // pickList para Tratamento
   options = options();
 
@@ -41,33 +46,7 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
   pais;
   company = "Teste";
 
-  objectNameToGetRecordTypes = "Lead";
-  lstRecordTypes = [];
-  selectedRecordTypeId;
-  selectedRecordTypeName;
-  showError = false;
-
-  // Wire service para pegar o recordTypeId de Pessoa Fisica
-  @wire(getObjectInfo, { objectApiName: "$objectNameToGetRecordTypes" })
-  getObjectInfo({ error, data }) {
-    if (data) {
-      this.lstRecordTypes = [];
-      for (let key in data.recordTypeInfos) {
-        if (data.recordTypeInfos[key].name === "Pessoa Física") {
-          this.selectedRecordTypeId = key;
-          this.selectedRecordTypeName = key.name;
-        }
-
-        this.lstRecordTypes.push({
-          value: key,
-          label: data.recordTypeInfos[key].name,
-        });
-      }
-    } else if (error) {
-      console.log("Error while getting record types");
-      this.lstRecordTypes = [];
-    }
-  }
+ 
   // Wire service para pegar o recordTypeId ser usado to get picklist Origem do Lead (Lead Source)
   @wire(getObjectInfo, { objectApiName: LEAD_OBJECT })
   wireObjectInfo({ error, data }) {
@@ -241,7 +220,7 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
       // Invocar o método inputValidade no componente filho
       this.handleInvokeChildMethodEndereco();
       this.handleInvokeChildMethodServico();
-
+      return;
       //validação regex
     } else if (!this.validateCPF(this.cpf)) {
       this.dispatchEvent(
@@ -319,26 +298,25 @@ export default class LeadPessoaFisica extends NavigationMixin(LightningElement) 
 
         this.closeModal();
       } catch (error) {
-        console.error('Error creating lead:', error);
-    
-        let menssageErrorDuplicate = '';
+        console.error("Error creating lead:", error);
+
+        let menssageErrorDuplicate = "";
         // Error message handling
-        if (error.body.message.includes('DUPLICATES_DETECTED')) {
-          menssageErrorDuplicate = 'Valores Duplicados';
+        if (error.body.message.includes("DUPLICATES_DETECTED")) {
+          menssageErrorDuplicate = "Valores Duplicados";
         }
-      
+
         this.dispatchEvent(
           new ShowToastEvent({
             title: "Erro",
             // Use the correct variable name 'error.message' instead of just 'error'
-            message: "Ocorreu um erro ao criar a avaliação." + menssageErrorDuplicate,
+            message:
+              "Ocorreu um erro ao criar a avaliação." + menssageErrorDuplicate,
             variant: "error",
           })
         );
       } finally {
-        // Move this block outside the catch block to ensure it always executes
         this.closeModal();
-      
       }
     }
   }
