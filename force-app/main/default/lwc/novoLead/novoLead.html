@@ -14,7 +14,7 @@
           <lightning-layout-item>
             <span style="color: red;">* </span>
 
-                <label label class="slds-form-element__label" for="unique-id-of-input" >Qual tipo de lead deseja Criar?</label>
+                <label class="slds-form-element__label" for="unique-id-of-input" >Qual tipo de lead deseja Criar?</label>
           </lightning-layout-item>
           <lightning-layout-item class="slds-p-top_medium">
             <lightning-radio-group 
@@ -48,11 +48,11 @@
   </template>
       
     <template lwc:elseif={selectRecordFisico}>
-      <c-lead-pessoa-fisica onclosemodal={closeModal} ></c-lead-pessoa-fisica>
+      <c-lead-pessoa-fisica onclosemodal={closeModal} selected-record-type-id={selectedRecordTypeId} ></c-lead-pessoa-fisica>
   </template>
 
   <template lwc:elseif={selectRecordJuridico}>
-      <c-lead-pessoa-juridico onclosemodal={closeModal}></c-lead-pessoa-juridico>
+      <c-lead-pessoa-juridico onclosemodal={closeModal} selected-record-type-id={selectedRecordTypeId}></c-lead-pessoa-juridico>
   </template>
   <template lwc:else>
       <p>Deu erro</p>
