@@ -1,33 +1,27 @@
 <template>
-  <lightning-layout multiple-rows pull-to-boundary="medium">
-      <lightning-layout-item flexibility="auto" padding="horizontal-large">
-          <lightning-combobox
-              name="servico"
-              label="Tipo de Serviço" required
-              message-when-value-missing="Selecione o serviço"
-              data-element="required"
-              placeholder=""
-              value={valueServicoes}
-              options={servicos}
-              onchange={handleChange} 
-              
-          ></lightning-combobox>
-      </lightning-layout-item>
-    <lightning-layout-item >
-      <div class="slds-p-horizontal_xx-large"></div>
-
-    </lightning-layout-item>
-
-      <lightning-layout-item flexibility="auto" padding="horizontal-large">
-          <lightning-combobox
-              name="equipamento"
-              label="Equipamento" required
-              message-when-value-missing="Selecione o Equipamento"
-              data-element="required"
-              placeholder=""
-              options={equipamentos}
-              onchange={handleChange} 
-          ></lightning-combobox>
-      </lightning-layout-item>
-  </lightning-layout>
+  <div class="slds-grid slds-wrap">
+    <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-col_bump-right">
+      <lightning-combobox
+        name="servico"
+        label="Tipo de Serviço" required
+        message-when-value-missing="Selecione o serviço"
+        data-element="required"
+        placeholder=""
+        value={valueServicoes}
+        options={servicos}
+        onchange={handleChange} 
+      ></lightning-combobox>
+    </div>
+    <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-col_bump-left">
+      <lightning-combobox
+        name="equipamento"
+        label="Equipamento" required
+        message-when-value-missing="Selecione o Equipamento"
+        data-element="required"
+        placeholder=""
+        options={equipamentos}
+        onchange={handleChange} 
+      ></lightning-combobox>
+    </div>
+  </div>
 </template>

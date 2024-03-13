@@ -11,17 +11,8 @@
                             class="accordion-pessoa-fisica">
             <lightning-accordion-section name="info_pessoa" label="Informações do Lead pessoa física" class="my-style">
                 <!-- Info Pessoas -->
-
-                <lightning-layout
-                  multiple-rows
-                  pull-to-boundary="medium"
-                  class="custom-columns"
-                >  
-                  <lightning-layout-item 
-                    flexibility="auto" padding="around-large"
-                    
-                  >
-                 
+                <div class="slds-grid slds-wrap">
+                  <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-col_bump-right">
                     <lightning-combobox
                     name="tratamento"
                     label="Tratamento"
@@ -66,46 +57,40 @@
                     data-element="required"
                     onchange={handleChange} 
                     ></lightning-input>
-                  </lightning-layout-item>
-                  <lightning-layout-item >
-                    <div class="slds-p-horizontal_xx-large"></div>
-              
-                  </lightning-layout-item>
-                  <!-- left -->
-                  <lightning-layout-item 
-                  flexibility="auto" padding="around-large"
-                  >
-                  <lightning-combobox
-                    name="origemLead"
-                    label="Origem do Lead"
-                    value={selectedLead}
-                    placeholder=""
-                    options={optionsLead}
-                    onchange={handleChange} >
-                  </lightning-combobox>
+                  </div>
+
+                  <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12  slds-col_bump-left">
+                     
+                    <lightning-combobox
+                      name="origemLead"
+                      label="Origem do Lead"
+                      value={selectedLead}
+                      placeholder=""
+                      options={optionsLead}
+                      onchange={handleChange} >
+                    </lightning-combobox>
 
                     <lightning-input 
-                    type="email" 
-                    name="email"
-                    label="E-mail" required
-                    data-element="required"
-                    message-when-value-missing="Preencha este campo"
-                    onchange={handleChange} 
-
+                      type="email" 
+                      name="email"
+                      label="E-mail" required
+                      data-element="required"
+                      message-when-value-missing="Preencha este campo"
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
-                    type="tel" 
-                    label="Telefone" required
-                    message-when-value-missing="Preencha este campo"
-                    message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
-                    pattern="\d{11}"
-                    max-length="11"
-                    formatter="decimal"
-                    name="phone" 
-                    data-element="required"
-                    value={phone}
-                    onchange={handleChange} 
+                      type="tel" 
+                      label="Telefone" required
+                      message-when-value-missing="Preencha este campo"
+                      message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
+                      pattern="\d{11}"
+                      max-length="11"
+                      formatter="decimal"
+                      name="phone" 
+                      data-element="required"
+                      value={phone}
+                      onchange={handleChange} 
                     ></lightning-input>
                     
                     <div class="slds-m-top_medium">
@@ -117,11 +102,8 @@
                             name="isChecked"
                             onchange={handleChangeCheck} />
                     </div>
-
-                  </lightning-layout-item>
-                </lightning-layout>
-                
-                
+                  </div>
+                </div>  
                 <!--/Info Pessoas -->
             </lightning-accordion-section>
             <lightning-accordion-section name="info_servicos" label="Informações de serviço">

@@ -12,58 +12,51 @@
                             active-section-name={activeSections}>
             <lightning-accordion-section class="block info-pessoa" name="info_pessoa" label="Informações do Lead pessoa juridica">
                 <!-- Info Pessoas -->
-
-                <lightning-layout
-                  multiple-rows
-                  pull-to-boundary="medium"
-                >  
-                  <!-- Right Column -->
-                  <lightning-layout-item
-                    flexibility="auto" padding="around-large"
-                  >
-                 
+                <div class="slds-grid slds-wrap">
+                  <!--left column -->
+                  <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-col_bump-right">
                     <lightning-combobox
-                    name="tratamento"
-                    label="Tratamento"
-                    value={value}
-                    placeholder=""
-                    options={options}
-                    onchange={handleChange} 
-                    data-type="tratamento"
+                      name="tratamento"
+                      label="Tratamento"
+                      value={value}
+                      placeholder=""
+                      options={options}
+                      onchange={handleChange} 
+                      data-type="tratamento"
                     ></lightning-combobox>
 
                     <lightning-input 
-                    type="text"
-                    label="Primeiro nome" required
-                    message-when-value-missing="Preencha este campo"
-                    data-element="required"
-                    name="name"
-                    placeholder="First name"
-                    onchange={handleChange} 
+                      type="text"
+                      label="Primeiro nome" required
+                      message-when-value-missing="Preencha este campo"
+                      data-element="required"
+                      name="name"
+                      placeholder="First name"
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
-                    type="text"
-                    label="Sobrenome" required
-                    message-when-value-missing="Preencha este campo"
-                    name="sobrenome"
-                    placeholder="Last name"
-                    data-element="required"
-                    onchange={handleChange} 
+                      type="text"
+                      label="Sobrenome" required
+                      message-when-value-missing="Preencha este campo"
+                      name="sobrenome"
+                      placeholder="Last name"
+                      data-element="required"
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
-                    type="text"
-                    label="CNPJ" required
-                    message-when-value-missing="Preencha este campo"
-                    message-when-pattern-mismatch="O CNPJ deve conter 14 numerais apenas"
-                    data-element="required"
-                    placeholder="CNPJ*"
-                    pattern="\d{14}"
-                    max-length="14"
-                    formatter="decimal"
-                    name="cnpj"
-                    onchange={handleChange} 
+                      type="text"
+                      label="CNPJ" required
+                      message-when-value-missing="Preencha este campo"
+                      message-when-pattern-mismatch="O CNPJ deve conter 14 numerais apenas"
+                      data-element="required"
+                      placeholder="CNPJ*"
+                      pattern="\d{14}"
+                      max-length="14"
+                      formatter="decimal"
+                      name="cnpj"
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
@@ -85,60 +78,54 @@
                       placeholder="Title"
                       onchange={handleChange}
                     ></lightning-input>
-                  </lightning-layout-item>
-                  <lightning-layout-item >
-                    <div class="slds-p-horizontal_xx-large"></div>
-              
-                  </lightning-layout-item>
-                  <!-- left Column -->
-                  <lightning-layout-item 
-                    flexibility="auto" padding="around-large"
-                  >
-                  <lightning-combobox
-                    label="Setor" required
-                    data-element="required"
-                    message-when-value-missing="Preencha este campo"
-                    name="setor"
-                    options={optionsSetor}
-                    onchange={handleChange} 
-                    placeholder="Industry"
-                    value={value}
-                    variant="standard"
-                  ></lightning-combobox>
+                  </div>
+                   <!--/left column -->
+                   <!--right column -->
+                  <div class="slds-col slds-small-size_12-of-12 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-col_bump-left">
+                    <lightning-combobox
+                      label="Setor" required
+                      data-element="required"
+                      message-when-value-missing="Preencha este campo"
+                      name="setor"
+                      options={optionsSetor}
+                      onchange={handleChange} 
+                      placeholder="Industry"
+                      value={value}
+                      variant="standard"
+                    ></lightning-combobox>
                     
-                  <lightning-combobox
-                    name="origemLead"
-                    label="Origem do Lead" required
-                    data-element="required"
-                    value={selectedLead}
-                    placeholder=""
-                    options={optionsLead}
-                    onchange={handleChange} >
-                  </lightning-combobox>
+                    <lightning-combobox
+                      name="origemLead"
+                      label="Origem do Lead" required
+                      data-element="required"
+                      value={selectedLead}
+                      placeholder=""
+                      options={optionsLead}
+                      onchange={handleChange} >
+                    </lightning-combobox>
                    
                     <lightning-input 
-                    type="email" 
-                    name="email"
-                    data-element="required"
-                    label="E-mail" required
-                    message-when-value-missing="Preencha este campo"
-                    message-when-bad-input="Digite um E-email valido"
-                    onchange={handleChange} 
-
+                      type="email" 
+                      name="email"
+                      data-element="required"
+                      label="E-mail" required
+                      message-when-value-missing="Preencha este campo"
+                      message-when-bad-input="Digite um E-email valido"
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <lightning-input 
-                    type="tel" 
-                    label="Telefone" required
-                    data-element="required"
-                    message-when-value-missing="Preencha este campo"
-                    message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
-                    pattern="\d{11}"
-                    max-length="11"
-                    formatter="decimal"
-                    name="phone" 
-                    value={phone}
-                    onchange={handleChange} 
+                      type="tel" 
+                      label="Telefone" required
+                      data-element="required"
+                      message-when-value-missing="Preencha este campo"
+                      message-when-pattern-mismatch="O Telefone deve estar no formato 19999999999"
+                      pattern="\d{11}"
+                      max-length="11"
+                      formatter="decimal"
+                      name="phone" 
+                      value={phone}
+                      onchange={handleChange} 
                     ></lightning-input>
 
                     <div class="slds-m-top_medium">
@@ -157,10 +144,9 @@
                       name="website"
                       onchange={handleChange}
                     ></lightning-input>
-                  </lightning-layout-item>
-                </lightning-layout>
-                
-                
+                  </div>
+                  <!--/left column -->
+                </div>
                 <!--/Info Pessoas -->
             </lightning-accordion-section>
             <lightning-accordion-section class="info-servicos" name="info_servicos" label="Informações de serviço">
