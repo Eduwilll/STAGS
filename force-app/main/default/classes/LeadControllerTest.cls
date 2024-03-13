@@ -1,8 +1,8 @@
 /**
- * @description       : Está classe é responsavel por fazer os testes de inserção de Leads da Classe LeadController.
+ * @description       : Está classe é responsavel por fazer os testes da Classe LeadController.
  * @author            : Eduardo Fabricio
  * @group             : 
- * @last modified on  : 20-02-2024
+ * @last modified on  : 13-03-2024
  * @last modified by  : Eduardo Fabricio
 **/
 
@@ -36,7 +36,8 @@ public with sharing class LeadControllerTest {
         String LeadCompany = 'XYZ Inc.';
 
         // Recuperar o ID do record type para Pessoa Fisica
-        String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get(PESSOA_FISICA_RECORD_TYPE_NAME).getRecordTypeId();
+        //String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get(PESSOA_FISICA_RECORD_TYPE_NAME).getRecordTypeId();
+        String leadRecordTypeId = LeadController.getLeadRecordTypeIdByName(PESSOA_FISICA_RECORD_TYPE_NAME);
 
         // Iniciar a execução do teste 
         Test.startTest();
@@ -58,25 +59,25 @@ public with sharing class LeadControllerTest {
                             FROM Lead  LIMIT 1];
 
         // Assertion statements para verificar o record Lead criado                        
-        System.assertEquals(leadFirstName, createdLead.FirstName, 'Erro: First Name não é igual');
-        System.assertEquals(leadLastName, createdLead.LastName, 'Erro: Last Name não é igual');
-        System.assertEquals(leadEmail, createdLead.Email, 'Erro: Email não é igual');
-        System.assertEquals(leadPhone, createdLead.Phone, 'Erro: Phone não é igual');
-        System.assertEquals(leadCpf, createdLead.CPF__c, 'Erro: CPF não é igual');
-        System.assertEquals(leadOrigem, createdLead.LeadSource, 'Erro: Lead Source não é igual');
-        System.assertEquals(leadDoNotCall, createdLead.DoNotCall, 'Erro: Do Not Call não é igual');
-        System.assertEquals(leadCep, createdLead.CEP__c, 'Erro: CEP não é igual');
-        System.assertEquals(leadRua, createdLead.Rua__c, 'Erro: Rua não é igual');
-        System.assertEquals(leadNumero, createdLead.Numero__c, 'Erro: Numero não é igual');
-        System.assertEquals(leadComplemento, createdLead.Complemento__c, 'Erro: Complemento não é igual');
-        System.assertEquals(leadBairro, createdLead.Bairro__c, 'Erro: Bairro não é igual');
-        System.assertEquals(leadCidade, createdLead.Cidade__c, 'Erro: Cidade não é igual');
-        System.assertEquals(leadEstado, createdLead.Estado_Provincia__c, 'Erro: Estado não é igual');
-        System.assertEquals(leadPais, createdLead.Pais__c, 'Erro: Pais não é igual');
-        System.assertEquals(leadServico, createdLead.Tipo_Servico__c, 'Erro: Tipo de Serviço não é igual');
-        System.assertEquals(leadEquipamento, createdLead.Equipamento__c, 'Erro: Equipamento não é igual');
-        System.assertEquals(LeadCompany, createdLead.Company, 'Erro: Company não é igual');
-        System.assertEquals(leadRecordTypeId, createdLead.RecordTypeId, 'Erro: Record Type Id não é igual');
+        Assert.areEqual(leadFirstName, createdLead.FirstName, 'Erro: First Name não é igual');
+        Assert.areEqual(leadLastName, createdLead.LastName, 'Erro: Last Name não é igual');
+        Assert.areEqual(leadEmail, createdLead.Email, 'Erro: Email não é igual');
+        Assert.areEqual(leadPhone, createdLead.Phone, 'Erro: Phone não é igual');
+        Assert.areEqual(leadCpf, createdLead.CPF__c, 'Erro: CPF não é igual');
+        Assert.areEqual(leadOrigem, createdLead.LeadSource, 'Erro: Lead Source não é igual');
+        Assert.areEqual(leadDoNotCall, createdLead.DoNotCall, 'Erro: Do Not Call não é igual');
+        Assert.areEqual(leadCep, createdLead.CEP__c, 'Erro: CEP não é igual');
+        Assert.areEqual(leadRua, createdLead.Rua__c, 'Erro: Rua não é igual');
+        Assert.areEqual(leadNumero, createdLead.Numero__c, 'Erro: Numero não é igual');
+        Assert.areEqual(leadComplemento, createdLead.Complemento__c, 'Erro: Complemento não é igual');
+        Assert.areEqual(leadBairro, createdLead.Bairro__c, 'Erro: Bairro não é igual');
+        Assert.areEqual(leadCidade, createdLead.Cidade__c, 'Erro: Cidade não é igual');
+        Assert.areEqual(leadEstado, createdLead.Estado_Provincia__c, 'Erro: Estado não é igual');
+        Assert.areEqual(leadPais, createdLead.Pais__c, 'Erro: Pais não é igual');
+        Assert.areEqual(leadServico, createdLead.Tipo_Servico__c, 'Erro: Tipo de Serviço não é igual');
+        Assert.areEqual(leadEquipamento, createdLead.Equipamento__c, 'Erro: Equipamento não é igual');
+        Assert.areEqual(LeadCompany, createdLead.Company, 'Erro: Company não é igual');
+        Assert.areEqual(leadRecordTypeId, createdLead.RecordTypeId, 'Erro: Record Type Id não é igual');
         
 
     }
@@ -108,7 +109,8 @@ public with sharing class LeadControllerTest {
         String leadEquipamento = 'LG';
 
         // Recuperar o ID do record type para Pessoa Fisica
-        String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get(PESSOA_JURIDICA_RECORD_TYPE_NAME).getRecordTypeId();
+        //String leadRecordTypeId = Schema.SObjectType.Lead.getRecordTypeInfosByName().get(PESSOA_JURIDICA_RECORD_TYPE_NAME).getRecordTypeId();
+        String leadRecordTypeId = LeadController.getLeadRecordTypeIdByName(PESSOA_JURIDICA_RECORD_TYPE_NAME);
 
         // Iniciar a execução do teste 
         Test.startTest();
@@ -127,29 +129,29 @@ public with sharing class LeadControllerTest {
                             FROM Lead  LIMIT 1];
 
         // Assertion statements para verificar o record Lead criado                        
-        System.assertEquals(leadSalutation, createdLead.Salutation, 'Erro: Salutation não é igual');
-        System.assertEquals(leadFirstName, createdLead.FirstName, 'Erro: First Name não é igual');
-        System.assertEquals(leadLastName, createdLead.LastName, 'Erro: Last Name não é igual');
-        System.assertEquals(leadEmail, createdLead.Email, 'Erro: Email não é igual');
-        System.assertEquals(leadPhone, createdLead.Phone, 'Erro: Phone não é igual');
-        System.assertEquals(leadCnpj, createdLead.CNPJ__c, 'Erro: CNPJ não é igual');
-        System.assertEquals(leadEmpresa, createdLead.Company, 'Erro: Company não é igual');
-        System.assertEquals(leadSetor, createdLead.Industry, 'Erro: Industry não é igual');
-        System.assertEquals(leadCargo, createdLead.Title, 'Erro: Title não é igual');
-        System.assertEquals(leadOrigem, createdLead.LeadSource, 'Erro: Lead Source não é igual');
-        System.assertEquals(leadDoNotCall, createdLead.DoNotCall, 'Erro: Do Not Call não é igual');
-        System.assertEquals(leadWebsite, createdLead.Website, 'Erro: Website não é igual');
-        System.assertEquals(leadCep, createdLead.CEP__c, 'Erro: CEP não é igual');
-        System.assertEquals(leadRua, createdLead.Rua__c, 'Erro: Rua não é igual');
-        System.assertEquals(leadNumero, createdLead.Numero__c, 'Erro: Numero não é igual');
-        System.assertEquals(leadComplemento, createdLead.Complemento__c, 'Erro: Complemento não é igual');
-        System.assertEquals(leadBairro, createdLead.Bairro__c, 'Erro: Bairro não é igual');
-        System.assertEquals(leadCidade, createdLead.Cidade__c, 'Erro: Cidade não é igual');
-        System.assertEquals(leadEstado, createdLead.Estado_Provincia__c, 'Erro: Estado não é igual');
-        System.assertEquals(leadPais, createdLead.Pais__c, 'Erro: Pais não é igual');
-        System.assertEquals(leadServico, createdLead.Tipo_Servico__c, 'Erro: Tipo de Serviço não é igual');
-        System.assertEquals(leadEquipamento, createdLead.Equipamento__c, 'Erro: Equipamento não é igual');
-        System.assertEquals(leadRecordTypeId, createdLead.RecordTypeId, 'Erro: Record Type Id não é igual');
+        Assert.areEqual(leadSalutation, createdLead.Salutation, 'Erro: Salutation não é igual');
+        Assert.areEqual(leadFirstName, createdLead.FirstName, 'Erro: First Name não é igual');
+        Assert.areEqual(leadLastName, createdLead.LastName, 'Erro: Last Name não é igual');
+        Assert.areEqual(leadEmail, createdLead.Email, 'Erro: Email não é igual');
+        Assert.areEqual(leadPhone, createdLead.Phone, 'Erro: Phone não é igual');
+        Assert.areEqual(leadCnpj, createdLead.CNPJ__c, 'Erro: CNPJ não é igual');
+        Assert.areEqual(leadEmpresa, createdLead.Company, 'Erro: Company não é igual');
+        Assert.areEqual(leadSetor, createdLead.Industry, 'Erro: Industry não é igual');
+        Assert.areEqual(leadCargo, createdLead.Title, 'Erro: Title não é igual');
+        Assert.areEqual(leadOrigem, createdLead.LeadSource, 'Erro: Lead Source não é igual');
+        Assert.areEqual(leadDoNotCall, createdLead.DoNotCall, 'Erro: Do Not Call não é igual');
+        Assert.areEqual(leadWebsite, createdLead.Website, 'Erro: Website não é igual');
+        Assert.areEqual(leadCep, createdLead.CEP__c, 'Erro: CEP não é igual');
+        Assert.areEqual(leadRua, createdLead.Rua__c, 'Erro: Rua não é igual');
+        Assert.areEqual(leadNumero, createdLead.Numero__c, 'Erro: Numero não é igual');
+        Assert.areEqual(leadComplemento, createdLead.Complemento__c, 'Erro: Complemento não é igual');
+        Assert.areEqual(leadBairro, createdLead.Bairro__c, 'Erro: Bairro não é igual');
+        Assert.areEqual(leadCidade, createdLead.Cidade__c, 'Erro: Cidade não é igual');
+        Assert.areEqual(leadEstado, createdLead.Estado_Provincia__c, 'Erro: Estado não é igual');
+        Assert.areEqual(leadPais, createdLead.Pais__c, 'Erro: Pais não é igual');
+        Assert.areEqual(leadServico, createdLead.Tipo_Servico__c, 'Erro: Tipo de Serviço não é igual');
+        Assert.areEqual(leadEquipamento, createdLead.Equipamento__c, 'Erro: Equipamento não é igual');
+        Assert.areEqual(leadRecordTypeId, createdLead.RecordTypeId, 'Erro: Record Type Id não é igual');
                             
     }
    
